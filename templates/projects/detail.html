@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ proyecto.titulo }} | Portfolio{% endblock %}
+{% block meta_description %}{{ proyecto.meta_description|default:proyecto.resumen }}{% endblock %}
+
+{% block content %}
+<!-- Hero Project -->
+<section style="background-color: var(--bg-secondary); border-bottom: 1px solid var(--border-color); padding: var(--space-12) 0;">
+    <div class="container flex gap-8 items-center" style="flex-wrap: wrap;">
+        {% if proyecto.logo %}
+        <img src="{{ proyecto.logo.url }}" alt="{{ proyecto.titulo }} Logo" style="width: 80px; height: 80px; object-fit: contain; border-radius: var(--radius-md);">
+        {% endif %}
+        <div style="flex: 1; min-width: 300px;">
+            <h1 style="font-size: 3rem; margin-bottom: var(--space-2);">{{ proyecto.titulo }}</h1>
+            <p class="text-muted" style="font-size: 1.2rem;">{{ proyecto.resumen }}</p>
+            <div class="flex gap-2 mt-4" style="flex-wrap: wrap;">
+                {% for tech in proyecto.tecnologias.all %}
+                <span class="badge" style="background-color: {{ tech.color|default:'var(--bg-tertiary)' }}; color: #fff; border: none;">
+                    {% if tech.icono and 'fa-' in tech.icono %}<i class="{{ tech.icono }}" style="margin-right: 4px;"></i>{% endif %}
+                    {{ tech.nombre }}
+                </span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="flex flex-col gap-2">
+            {% if proyecto.url_demo %}
+            <a href="{{ proyecto.url_demo }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                <i class="fa-solid fa-external-link-alt" style="margin-right: 8px;"></i> Ver Demo
+            </a>
+            {% endif %}
+            {% if proyecto.url_github %}
+            <a href="{{ proyecto.url_github }}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+                <i class="fa-brands fa-github" style="margin-right: 8px;"></i> GitHub
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Content -->
+<section class="section container grid md:grid-cols-3 gap-8">
+    <!-- Main Content -->
+    <div style="grid-column: span 2;">
+        {% if proyecto.imagen_principal %}
+        <img src="{{ proyecto.imagen_principal.url }}" alt="{{ proyecto.titulo }}" style="width: 100%; border-radius: var(--radius-xl); margin-bottom: var(--space-8); border: 1px solid var(--border-color);">
+        {% endif %}
+        
+        <div class="content-body" style="font-size: 1.1rem; color: var(--text-secondary); line-height: 1.8;">
+            <h2 style="color: var(--text-primary); margin-bottom: var(--space-4);">Acerca del Proyecto</h2>
+            {{ proyecto.descripcion_larga|linebreaks }}
+        </div>
+    </div>
+    
+    <!-- Sidebar -->
+    <div>
+        <div class="card" style="margin-bottom: var(--space-6);">
+            <div class="card-body">
+                <h3 style="margin-bottom: var(--space-4); font-size: 1.1rem; border-bottom: 1px solid var(--border-color); padding-bottom: var(--space-2);">Detalles</h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: var(--space-2);"><strong class="text-primary">Estado:</strong> <span class="text-muted">{{ proyecto.get_estado_display }}</span></li>
+                    {% if proyecto.fecha_creacion %}
+                    <li style="margin-bottom: var(--space-2);"><strong class="text-primary">Fecha:</strong> <span class="text-muted">{{ proyecto.fecha_creacion|date:"M Y" }}</span></li>
+                    {% endif %}
+                    {% if proyecto.url_cliente %}
+                    <li style="margin-bottom: var(--space-2);"><strong class="text-primary">Cliente:</strong> <a href="{{ proyecto.url_cliente }}" target="_blank" rel="noopener noreferrer" class="text-muted" style="text-decoration: underline;">Enlace</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Gallery & Videos -->
+{% if proyecto.capturas.exists or proyecto.videos.exists %}
+<section class="section container" style="border-top: 1px solid var(--border-color);">
+    <h2 style="font-size: 2rem; margin-bottom: var(--space-8); text-align: center;">Galería y Multimedia</h2>
+    
+    <div class="grid md:grid-cols-2 gap-8">
+        {% for captura in proyecto.capturas.all %}
+        <div>
+            <img src="{{ captura.imagen.url }}" alt="{{ captura.titulo }}" style="width: 100%; border-radius: var(--radius-lg); border: 1px solid var(--border-color); margin-bottom: var(--space-2);">
+            {% if captura.titulo %}
+            <p class="text-center text-muted text-sm">{{ captura.titulo }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+        
+        {% for video in proyecto.videos.all %}
+        <div class="card" style="cursor: pointer;" data-modal-target="video-modal-{{ video.id }}">
+            <div class="card-img-wrapper">
+                {% if video.miniatura %}
+                <img src="{{ video.miniatura.url }}" alt="{{ video.titulo }}" class="card-img">
+                {% else %}
+                <div class="card-img" style="background-color: var(--bg-tertiary);"></div>
+                {% endif %}
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.6); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                    <i class="fa-solid fa-play"></i>
+                </div>
+            </div>
+            <div class="card-body" style="padding: var(--space-4);">
+                <h4 style="margin: 0; font-size: 1.1rem;">{{ video.titulo }}</h4>
+            </div>
+        </div>
+        
+        <!-- Modal for Video -->
+        <div class="modal-overlay" id="video-modal-{{ video.id }}">
+            <div class="modal-content">
+                <button class="modal-close">&times;</button>
+                <div class="video-container">
+                    <iframe data-src="https://www.youtube.com/embed/{{ video.youtube_id }}?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+{% endblock %}

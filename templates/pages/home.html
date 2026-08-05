@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="section container" style="position: relative; overflow: hidden; padding-top: var(--space-16);">
+    <div class="grid md:grid-cols-2 gap-8 items-center">
+        <div style="z-index: 2;">
+            <div class="badge" style="margin-bottom: var(--space-6);">
+                <div class="badge-dot"></div> Desarrolladores Full Stack
+            </div>
+            
+            <h1 class="hero-title">
+                Construyendo el futuro<br>
+                <span class="text-gradient">línea por línea</span><span style="color: var(--accent-pink); animation: blink 1s step-end infinite;">_</span>
+            </h1>
+            
+            <style>
+                @keyframes blink { 50% { opacity: 0; } }
+                .hero-btns {
+                    display: flex;
+                    gap: var(--space-4);
+                    margin-bottom: var(--space-12);
+                    flex-wrap: wrap;
+                }
+                @media (max-width: 768px) {
+                    .hero-btns {
+                        flex-direction: column;
+                        width: 100%;
+                    }
+                    .hero-btns .btn {
+                        width: 100%;
+                    }
+                }
+            </style>
+            
+            <p class="text-muted hero-subtitle">
+                Creamos soluciones digitales robustas.
+            </p>
+            
+            <div class="hero-btns">
+                <a href="#proyectos" class="btn btn-primary">
+                    Ver Proyectos <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i>
+                </a>
+                <a href="/contacto/" class="btn btn-secondary" style="border-color: rgba(255,255,255,0.1);">
+                    <i class="fa-regular fa-envelope" style="margin-right: 8px;"></i> Contactar
+                </a>
+            </div>
+        </div>
+        
+        <div style="position: relative; z-index: 1;">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120%; height: 120%; background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(0,0,0,0) 60%); z-index: -1;"></div>
+            
+            <div style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-2xl); aspect-ratio: 16/11; overflow: hidden; position: relative; box-shadow: var(--shadow-lg);">
+                <div style="position: absolute; inset: 0; background: linear-gradient(145deg, #1e1b4b 0%, #171717 100%); display: flex; align-items: center; justify-content: center; color: var(--text-muted);">
+                    <i class="fa-solid fa-laptop-code" style="font-size: 5rem; opacity: 0.2;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<!-- (Comentado según solicitud anterior)
+<section class="section container">
+    <div class="stats-card">
+        <div class="stat-item">
+            <div class="stat-icon" style="color: var(--accent-primary);">
+                <i class="fa-solid fa-code"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-number">{{ stats.proyectos }}</div>
+                <div class="stat-title">Proyectos Completados</div>
+            </div>
+        </div>
+        <div style="width: 1px; background-color: var(--border-color);" class="md-flex"></div>
+        <div class="stat-item">
+            <div class="stat-icon" style="color: var(--accent-pink);">
+                <i class="fa-brands fa-youtube"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-number">{{ stats.videos }}</div>
+                <div class="stat-title">Videos Publicados</div>
+            </div>
+        </div>
+        <div style="width: 1px; background-color: var(--border-color);" class="md-flex"></div>
+        <div class="stat-item">
+            <div class="stat-icon" style="color: #3b82f6;">
+                <i class="fa-solid fa-microchip"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-number">{{ stats.tecnologias }}</div>
+                <div class="stat-title">Tecnologías</div>
+            </div>
+        </div>
+    </div>
+</section>
+-->
+
+<!-- Proyectos Destacados -->
+<section id="proyectos" class="section container" style="margin-top: var(--space-8);">
+    <div class="flex justify-between items-end mb-8" style="flex-wrap: wrap; gap: var(--space-4);">
+        <div>
+            <h2 style="font-size: 2rem; font-weight: 700;">Proyectos Destacados</h2>
+            <div style="width: 50px; height: 3px; background: var(--gradient-glow); border-radius: 2px; margin-top: 8px;"></div>
+        </div>
+        <a href="{% url 'projects:list' %}" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.4rem 0.8rem;">
+            Ver todos los proyectos <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i>
+        </a>
+    </div>
+    
+    {% if proyectos_destacados %}
+    <div class="grid md:grid-cols-3 gap-8">
+        {% for proyecto in proyectos_destacados %}
+        <a href="{% url 'projects:detail' proyecto.slug %}" class="card">
+            <div class="card-img-wrapper">
+                {% if proyecto.imagen_principal %}
+                <img src="{{ proyecto.imagen_principal.url }}" alt="{{ proyecto.titulo }}" class="card-img" loading="lazy">
+                {% else %}
+                <div class="card-img" style="background-color: var(--bg-tertiary);"></div>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <h3 class="card-title">{{ proyecto.titulo }}</h3>
+                <p class="card-text">{{ proyecto.resumen }}</p>
+                <div class="flex gap-2" style="flex-wrap: wrap;">
+                    {% for tech in proyecto.tecnologias.all|slice:":3" %}
+                    <span class="badge" style="background: transparent; padding: 0.1rem 0.5rem; font-size: 0.7rem;">{{ tech.nombre }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+</section>
+
+<!-- Tecnologías que domino -->
+<section class="section container">
+    <div class="mb-8">
+        <h2 style="font-size: 2rem; font-weight: 700;">Tecnologías que domino</h2>
+        <div style="width: 50px; height: 3px; background: var(--gradient-glow); border-radius: 2px; margin-top: 8px;"></div>
+    </div>
+    
+    <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
+        {% for tech in tecnologias %}
+        <div class="card" style="padding: var(--space-4); text-align: center; border-color: rgba(255,255,255,0.05); position: relative; overflow: hidden; background-color: var(--bg-secondary);">
+            <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 30px; background: {{ tech.color|default:'var(--accent-primary)' }}; filter: blur(25px); opacity: 0.15; z-index: 1;"></div>
+            
+            <div style="font-size: 2.5rem; margin-bottom: var(--space-2); color: {{ tech.color|default:'var(--text-primary)' }}; position: relative; z-index: 2;">
+                {% if tech.icono and 'fa-' in tech.icono %}
+                    <i class="{{ tech.icono }}"></i>
+                {% elif tech.icono and '<svg' in tech.icono %}
+                    <div style="width: 2.5rem; height: 2.5rem; margin: 0 auto;">{{ tech.icono|safe }}</div>
+                {% else %}
+                    <i class="fa-solid fa-code"></i>
+                {% endif %}
+            </div>
+            <h4 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.25rem; position: relative; z-index: 2;">{{ tech.nombre }}</h4>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="section container" style="background-color: var(--bg-secondary); border-radius: var(--radius-2xl); padding: var(--space-8); margin-top: var(--space-8); margin-bottom: var(--space-16);">
+    <div class="cta-card">
+        <div style="position: relative; z-index: 2; flex: 1;">
+            <h2 style="font-size: 2.5rem; font-weight: 700; margin-bottom: var(--space-4);">¿Tienen un proyecto en mente?</h2>
+            <p class="text-muted" style="font-size: 1.1rem; line-height: 1.6; max-width: 500px; margin-bottom: var(--space-8); color: #c4b5fd;">
+                Estamos siempre abiertos a discutir nuevas oportunidades y crear soluciones increíbles juntos.
+            </p>
+            <a href="{% url 'contact:page' %}" class="btn btn-secondary" style="border-color: rgba(255,255,255,0.2);">
+                Hablemos <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i>
+            </a>
+        </div>
+        
+        <div style="position: relative; z-index: 2;">
+            <div style="width: 150px; height: 150px; border-radius: 50%; background: linear-gradient(135deg, rgba(139,92,246,0.2) 0%, rgba(217,70,239,0.2) 100%); display: flex; align-items: center; justify-content: center; font-size: 4rem; color: var(--accent-pink); box-shadow: 0 0 50px rgba(139, 92, 246, 0.3); border: 1px solid rgba(255,255,255,0.1);">
+                <i class="fa-regular fa-comment-dots"></i>
+            </div>
+        </div>
+        
+        <!-- Glow decorations -->
+        <div style="position: absolute; right: -100px; bottom: -100px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, rgba(0,0,0,0) 70%); border-radius: 50%; z-index: 1;"></div>
+    </div>
+</section>
+{% endblock %}

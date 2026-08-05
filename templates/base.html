@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Portafolio{% endblock %}</title>
+    
+    <!-- Meta Tags -->
+    <meta name="description" content="{% block meta_description %}Portfolio profesional con proyectos, videos y más.{% endblock %}">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    
+    <!-- FontAwesome para íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.9.10" defer></script>
+    
+    <!-- JS Vanilla -->
+    <script src="{% static 'js/main.js' %}" defer></script>
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body htmx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+    
+    <nav class="navbar">
+        <div class="container flex justify-between items-center">
+            <a href="{% url 'home' %}" style="font-weight: 700; font-size: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span class="text-gradient" style="font-family: var(--font-mono);">&lt;/&gt;</span> Portafolio
+            </a>
+            
+            <div class="nav-links">
+                <a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Inicio</a>
+                <a href="{% url 'projects:list' %}" class="nav-link {% if request.resolver_match.app_name == 'projects' %}active{% endif %}">Proyectos</a>
+                <a href="{% url 'videos:library' %}" class="nav-link {% if request.resolver_match.app_name == 'videos' %}active{% endif %}">Videos</a>
+                <a href="#" class="nav-link">Tecnologías</a>
+                <a href="{% url 'contact:page' %}" class="nav-link {% if request.resolver_match.app_name == 'contact' %}active{% endif %}">Contacto</a>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <button style="background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 1.1rem; padding: 0.5rem;">
+                    <i class="fa-regular fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    
+    <footer style="position: relative; padding: var(--space-12) 0 var(--space-6) 0; border-top: 1px solid var(--border-color); margin-top: auto; background-color: var(--bg-main);">
+        <div class="container">
+            <div class="grid md:grid-cols-4 gap-8 mb-8" style="flex-wrap: wrap;">
+                
+                <!-- Col 1 -->
+                <div style="grid-column: span 1; md:grid-column: span 1;">
+                    <a href="{% url 'home' %}" style="font-weight: 700; font-size: 1.25rem; display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-4);">
+                        <span class="text-gradient" style="font-family: var(--font-mono);">&lt;/&gt;</span> Portafolio
+                    </a>
+                    <p class="text-muted" style="font-size: 0.85rem; margin-bottom: var(--space-4);">
+                        Construyendo el futuro, línea por línea.
+                    </p>
+                    <p class="text-muted" style="font-size: 0.75rem;">
+                        &copy; {% now "Y" %} Tu Nombre. Todos los derechos reservados.
+                    </p>
+                </div>
+                
+                <!-- Cols Links -->
+                <div class="flex gap-8" style="grid-column: span 2; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 120px;">
+                        <h4 style="font-size: 0.9rem; font-weight: 600; margin-bottom: var(--space-4);">Navegación</h4>
+                        <div class="flex flex-col gap-2">
+                            <a href="{% url 'home' %}" class="text-secondary" style="font-size: 0.85rem;">Inicio</a>
+                            <a href="{% url 'projects:list' %}" class="text-secondary" style="font-size: 0.85rem;">Proyectos</a>
+                            <a href="{% url 'videos:library' %}" class="text-secondary" style="font-size: 0.85rem;">Videos</a>
+                            <a href="{% url 'contact:page' %}" class="text-secondary" style="font-size: 0.85rem;">Contacto</a>
+                        </div>
+                    </div>
+                    <div style="flex: 1; min-width: 120px;">
+                        <h4 style="font-size: 0.9rem; font-weight: 600; margin-bottom: var(--space-4);">Recursos</h4>
+                        <div class="flex flex-col gap-2">
+                            <a href="#" class="text-secondary" style="font-size: 0.85rem;">GitHub</a>
+                            <a href="#" class="text-secondary" style="font-size: 0.85rem;">LinkedIn</a>
+                            <a href="#" class="text-secondary" style="font-size: 0.85rem;">Twitter</a>
+                            <a href="#" class="text-secondary" style="font-size: 0.85rem;">Email</a>
+                        </div>
+                    </div>
+                    <div style="flex: 1; min-width: 120px;">
+                        <h4 style="font-size: 0.9rem; font-weight: 600; margin-bottom: var(--space-4);">Tecnologías</h4>
+                        <div class="flex flex-col gap-2">
+                            <span class="text-secondary" style="font-size: 0.85rem;">Python</span>
+                            <span class="text-secondary" style="font-size: 0.85rem;">Django</span>
+                            <span class="text-secondary" style="font-size: 0.85rem;">JavaScript</span>
+                            <span class="text-secondary" style="font-size: 0.85rem;">PostgreSQL</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Col 4 CTA -->
+                <div style="grid-column: span 1; display: flex; flex-direction: column; align-items: flex-start;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); margin-bottom: var(--space-2);">
+                        Disponible para proyectos <div class="badge-dot"></div>
+                    </div>
+                    <a href="{% url 'contact:page' %}" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.4rem 0.8rem; border-color: rgba(255,255,255,0.1);">
+                        <i class="fa-regular fa-envelope" style="margin-right: 8px;"></i> Contactar
+                    </a>
+                </div>
+                
+            </div>
+            
+        </div>
+        
+        <button onclick="window.scrollTo({top:0, behavior:'smooth'})" style="position: absolute; right: 2rem; background: var(--bg-secondary); border: 1px solid var(--border-color); color: var(--text-secondary); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all var(--transition-fast);">
+            <i class="fa-solid fa-arrow-up"></i>
+        </button>
+    </footer>
+    
+</body>
+</html>

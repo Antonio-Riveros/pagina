@@ -1,0 +1,29 @@
+<div class="grid md:grid-cols-3 gap-8">
+    {% for proyecto in proyectos %}
+    <a href="{% url 'projects:detail' proyecto.slug %}" class="card">
+        <div class="card-img-wrapper">
+            {% if proyecto.imagen_principal %}
+            <img src="{{ proyecto.imagen_principal.url }}" alt="{{ proyecto.titulo }}" class="card-img" loading="lazy">
+            {% else %}
+            <div class="card-img" style="background-color: var(--bg-tertiary);"></div>
+            {% endif %}
+        </div>
+        <div class="card-body">
+            <h3 class="card-title">{{ proyecto.titulo }}</h3>
+            <p class="card-text">{{ proyecto.resumen }}</p>
+            <div class="flex gap-2" style="flex-wrap: wrap;">
+                {% for tech in proyecto.tecnologias.all|slice:":3" %}
+                <span class="badge">{{ tech.nombre }}</span>
+                {% endfor %}
+                {% if proyecto.tecnologias.count > 3 %}
+                <span class="badge">+{{ proyecto.tecnologias.count|add:"-3" }}</span>
+                {% endif %}
+            </div>
+        </div>
+    </a>
+    {% empty %}
+    <p class="text-center text-muted" style="grid-column: span 3; padding: var(--space-8) 0;">
+        No se encontraron proyectos que coincidan con la búsqueda.
+    </p>
+    {% endfor %}
+</div>

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Proyectos | Portfolio Premium{% endblock %}
+
+{% block content %}
+<div class="container section">
+    <div class="flex justify-between items-center mb-8" style="flex-wrap: wrap; gap: var(--space-4);">
+        <h1 style="font-size: 2.5rem;">Proyectos</h1>
+        
+        <div style="position: relative; width: 100%; max-width: 300px;">
+            <i class="fa-solid fa-search" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+            <input 
+                type="search" 
+                name="q" 
+                value="{{ query }}"
+                placeholder="Buscar proyectos..." 
+                class="form-control" 
+                style="padding-left: 2.5rem;"
+                hx-get="{% url 'projects:list' %}"
+                hx-trigger="keyup changed delay:300ms, search"
+                hx-target="#project-grid"
+                hx-indicator=".htmx-indicator"
+            >
+        </div>
+    </div>
+    
+    <div style="text-align: center; margin-bottom: var(--space-4);">
+        <i class="htmx-indicator fa-solid fa-circle-notch fa-spin text-muted" style="font-size: 2rem;"></i>
+    </div>
+    
+    <div id="project-grid">
+        {% include 'projects/partials/_project_list.html' %}
+    </div>
+</div>
+{% endblock %}

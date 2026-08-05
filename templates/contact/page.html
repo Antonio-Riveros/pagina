@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Contacto | Portfolio Premium{% endblock %}
+
+{% block content %}
+<div class="container section">
+    <div style="max-width: 600px; margin: 0 auto;">
+        <h1 style="font-size: 2.5rem; margin-bottom: var(--space-4); text-align: center;">Hablemos</h1>
+        <p class="text-muted text-center" style="font-size: 1.1rem; margin-bottom: var(--space-8);">
+            ¿Tienen un proyecto en mente o quieren discutir oportunidades de colaboración? Envíanos un mensaje y te responderemos lo antes posible.
+        </p>
+        
+        <div class="card" style="padding: var(--space-8);">
+            <div id="contact-form-container">
+                {% if success %}
+                    {% include 'contact/partials/_success.html' %}
+                {% else %}
+                <form hx-post="{% url 'contact:page' %}" hx-target="#contact-form-container" hx-swap="outerHTML">
+                    {% csrf_token %}
+                    
+                    {% for field in form %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                        <div class="text-accent" style="color: #e92a67; font-size: 0.85rem; margin-top: var(--space-1);">
+                            {{ field.errors.0 }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: var(--space-4);">
+                        Enviar Mensaje
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
