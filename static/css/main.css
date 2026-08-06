@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import 'variables.css';
 @import 'components.css';
 
@@ -16,123 +16,103 @@ html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     scroll-behavior: smooth;
+    font-size: 16px;
 }
 
 body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    background: var(--bg-main);
+    overflow-x: hidden;
 }
 
 main {
-    flex: 1;
+    flex-grow: 1;
 }
 
-a {
-    color: inherit;
-    text-decoration: none;
-    transition: color var(--transition-fast);
-}
-
-a:hover {
-    color: var(--accent-primary);
-}
-
-img, picture, video, canvas, svg {
-    display: block;
-    max-width: 100%;
-}
-
-input, button, textarea, select {
-    font: inherit;
-}
-
-p, h1, h2, h3, h4, h5, h6 {
-    overflow-wrap: break-word;
-}
-
+/* =========================================
+   Typography & Spacing
+   ========================================= */
 h1, h2, h3, h4, h5, h6 {
-    line-height: 1.2;
+    line-height: 1.1;
     font-weight: 700;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.04em;
+    color: var(--text-primary);
 }
 
-/* Layout Classes */
+.title-hero {
+    font-size: clamp(3rem, 8vw, 6rem);
+    letter-spacing: -0.05em;
+    margin-bottom: var(--space-6);
+}
+
+.title-section {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    letter-spacing: -0.04em;
+    margin-bottom: var(--space-4);
+}
+
+.text-muted { color: var(--text-muted); }
+.text-secondary { color: var(--text-secondary); }
+
+/* =========================================
+   Layout & Grid Utilities
+   ========================================= */
 .container {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto;
     padding: 0 var(--space-6);
 }
 
-.section {
-    padding-top: var(--space-24);
-    padding-bottom: var(--space-24);
-}
-
-/* Hero Typography */
-.hero-title {
-    font-size: 3.5rem;
-    font-weight: 800;
-    line-height: 1.1;
-    margin-bottom: var(--space-4);
-    letter-spacing: -0.03em;
-}
-
-.hero-subtitle {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    max-width: 500px;
-    margin-bottom: var(--space-8);
-}
-
-@media (max-width: 768px) {
-    .section {
-        padding-top: var(--space-12);
-        padding-bottom: var(--space-12);
-    }
-    
-    .hero-title {
-        font-size: 2.5rem;
-    }
-    
-    .hero-subtitle {
-        font-size: 1rem;
-    }
-}
-
-/* Utils */
-.text-center { text-align: center; }
-.text-muted { color: var(--text-muted); }
-.mt-2 { margin-top: var(--space-2); }
-.mt-4 { margin-top: var(--space-4); }
-.mt-8 { margin-top: var(--space-8); }
-.mb-2 { margin-bottom: var(--space-2); }
-.mb-4 { margin-bottom: var(--space-4); }
-.mb-8 { margin-bottom: var(--space-8); }
-
 .flex { display: flex; }
 .flex-col { flex-direction: column; }
 .items-center { align-items: center; }
-.justify-center { justify-content: center; }
 .justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.gap-2 { gap: var(--space-2); }
 .gap-4 { gap: var(--space-4); }
+.gap-6 { gap: var(--space-6); }
 .gap-8 { gap: var(--space-8); }
+.mb-4 { margin-bottom: var(--space-4); }
+.mb-8 { margin-bottom: var(--space-8); }
+.mb-16 { margin-bottom: var(--space-16); }
+.mt-auto { margin-top: auto; }
 
-.grid { display: grid; }
+.grid {
+    display: grid;
+}
+
 .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
 .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 
-.md-flex { display: none; }
-
-@media (max-width: 768px) {
-    .md\:grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
-    .md\:grid-cols-2 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
-}
-
-@media (min-width: 769px) {
-    .md-flex { display: flex; }
+@media (min-width: 768px) {
     .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .md\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .md\:grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 }
+
+@media (min-width: 1024px) {
+    .lg\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* =========================================
+   Animations
+   ========================================= */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-up {
+    animation: fadeUp 0.8s var(--transition-slow) forwards;
+}
+
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }

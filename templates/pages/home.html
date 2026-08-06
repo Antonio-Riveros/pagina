@@ -2,243 +2,177 @@
 {% load static %}
 
 {% block content %}
-<!-- Hero Section -->
-<section class="section container" style="position: relative; overflow: hidden; padding-top: var(--space-16);">
-    <div class="grid md:grid-cols-2 gap-8 items-center">
-        <div style="z-index: 2;">
-            <div class="badge" style="margin-bottom: var(--space-6);">
-                <div class="badge-dot"></div> Desarrolladores Full Stack
+<!-- Asymmetric Hero Section -->
+<section class="container" style="padding-top: var(--space-24); padding-bottom: var(--space-24); position: relative;">
+    
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+        <!-- Left: Typography -->
+        <div class="animate-fade-up">
+            <div style="display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; border: 1px solid var(--border-color); padding: 0.25rem 0.75rem; border-radius: var(--radius-full); color: var(--text-secondary); margin-bottom: var(--space-8);">
+                <span style="width: 6px; height: 6px; background: #10b981; border-radius: 50%; display: inline-block;"></span>
+                Disponible para nuevos proyectos
             </div>
             
-            <h1 class="hero-title">
+            <h1 class="title-hero">
                 {{ config.titulo_principal }}<br>
-                <span class="text-gradient">{{ config.subtitulo_destacado }}</span>
+                <span style="color: var(--text-secondary);">{{ config.subtitulo_destacado }}</span>
             </h1>
             
-            <style>
-                @keyframes blink { 50% { opacity: 0; } }
-                .hero-btns {
-                    display: flex;
-                    gap: var(--space-4);
-                    margin-bottom: var(--space-12);
-                    flex-wrap: wrap;
-                }
-                @media (max-width: 768px) {
-                    .hero-btns {
-                        flex-direction: column;
-                        width: 100%;
-                    }
-                    .hero-btns .btn {
-                        width: 100%;
-                    }
-                }
-            </style>
-            
-            <p class="text-muted hero-subtitle">
+            <p class="text-muted" style="font-size: 1.1rem; max-width: 90%; margin-bottom: var(--space-8); line-height: 1.6;">
                 {{ config.descripcion }}
             </p>
             
-            <div class="hero-btns">
-                <a href="#proyectos" class="btn btn-primary">
-                    Ver Proyectos <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i>
-                </a>
-                <a href="/contacto/" class="btn btn-secondary" style="border-color: rgba(255,255,255,0.1);">
-                    <i class="fa-regular fa-envelope" style="margin-right: 8px;"></i> Contactar
-                </a>
+            <div class="flex gap-4">
+                <a href="#proyectos" class="btn btn-primary">Ver Proyectos</a>
+                <a href="/contacto/" class="btn btn-secondary">Contacto</a>
             </div>
         </div>
         
-        <div style="position: relative; z-index: 1;">
-            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120%; height: 120%; background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(0,0,0,0) 60%); z-index: -1;"></div>
-            <!-- Right Image/Graphic -->
-            <div style="flex: 1; min-width: 300px; display: flex; justify-content: center; align-items: center; padding: 2rem;">
-                <div class="glass-panel" style="width: 100%; max-width: 500px; aspect-ratio: 4/3; border-radius: 20px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.4);">
-                    {% if config.imagen_hero %}
-                    <img src="{{ config.imagen_hero.url }}" alt="{{ config.titulo_principal }}" style="width: 100%; height: 100%; object-fit: cover;">
-                    {% else %}
-                    <div style="position: absolute; width: 150%; height: 150%; background: radial-gradient(circle, rgba(168,85,247,0.1) 0%, rgba(0,0,0,0) 70%); animation: pulse 4s infinite;"></div>
-                    <i class="fa-solid fa-laptop-code" style="font-size: 5rem; color: rgba(255,255,255,0.05); z-index: 1;"></i>
-                    {% endif %}
+        <!-- Right: Tech Composition Art -->
+        <div class="animate-fade-up delay-200" style="position: relative; height: 500px; display: flex; align-items: center; justify-content: center;">
+            
+            <!-- Background Glow -->
+            <div style="position: absolute; width: 100%; height: 100%; background: radial-gradient(circle, rgba(124, 58, 237, 0.1) 0%, transparent 60%); z-index: 0;"></div>
+            
+            <!-- Tech Cards Composition -->
+            <div style="position: relative; z-index: 1; width: 100%; max-width: 400px; aspect-ratio: 1; perspective: 1000px;">
+                <!-- Main Card -->
+                <div style="position: absolute; top: 10%; left: 10%; right: 10%; bottom: 10%; border: 1px solid rgba(255,255,255,0.1); background: rgba(10,10,10,0.8); backdrop-filter: blur(10px); border-radius: var(--radius-xl); padding: var(--space-6); transform: rotateY(-15deg) rotateX(10deg); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);">
+                    
+                    <div style="display: flex; gap: 4px; margin-bottom: var(--space-6);">
+                        <div style="width: 10px; height: 10px; border-radius: 50%; background: #ef4444;"></div>
+                        <div style="width: 10px; height: 10px; border-radius: 50%; background: #eab308;"></div>
+                        <div style="width: 10px; height: 10px; border-radius: 50%; background: #22c55e;"></div>
+                    </div>
+                    
+                    <div style="width: 70%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; margin-bottom: var(--space-4);"></div>
+                    <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; margin-bottom: var(--space-3);"></div>
+                    <div style="width: 85%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; margin-bottom: var(--space-3);"></div>
+                    <div style="width: 50%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; margin-bottom: var(--space-8);"></div>
+                    
+                    <div style="display: flex; gap: 10px;">
+                        <div style="width: 40px; height: 40px; border-radius: var(--radius-md); background: rgba(124, 58, 237, 0.2); border: 1px solid rgba(124, 58, 237, 0.4);"></div>
+                        <div style="width: 40px; height: 40px; border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255,255,255,0.1);"></div>
+                        <div style="width: 40px; height: 40px; border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255,255,255,0.1);"></div>
+                    </div>
                 </div>
+                
+                <!-- Floating Element 1 -->
+                <div style="position: absolute; bottom: 0; right: -10%; width: 120px; padding: var(--space-4); border: 1px solid rgba(255,255,255,0.15); background: rgba(20,20,20,0.9); backdrop-filter: blur(10px); border-radius: var(--radius-lg); transform: translateZ(50px);">
+                    <div style="font-family: var(--font-mono); font-size: 0.7rem; color: #10b981; margin-bottom: 4px;">status: 200</div>
+                    <div style="width: 100%; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px;"></div>
+                </div>
+                
             </div>
         </div>
     </div>
 </section>
 
-<!-- Stats Section -->
-<!-- (Comentado según solicitud anterior)
-<section class="section container">
-    <div class="stats-card">
-        <div class="stat-item">
-            <div class="stat-icon" style="color: var(--accent-primary);">
-                <i class="fa-solid fa-code"></i>
-            </div>
-            <div class="stat-content">
-                <div class="stat-number">{{ stats.proyectos }}</div>
-                <div class="stat-title">Proyectos Completados</div>
-            </div>
-        </div>
-        <div style="width: 1px; background-color: var(--border-color);" class="md-flex"></div>
-        <div class="stat-item">
-            <div class="stat-icon" style="color: var(--accent-pink);">
-                <i class="fa-brands fa-youtube"></i>
-            </div>
-            <div class="stat-content">
-                <div class="stat-number">{{ stats.videos }}</div>
-                <div class="stat-title">Videos Publicados</div>
-            </div>
-        </div>
-        <div style="width: 1px; background-color: var(--border-color);" class="md-flex"></div>
-        <div class="stat-item">
-            <div class="stat-icon" style="color: #3b82f6;">
-                <i class="fa-solid fa-microchip"></i>
-            </div>
-            <div class="stat-content">
-                <div class="stat-number">{{ stats.tecnologias }}</div>
-                <div class="stat-title">Tecnologías</div>
-            </div>
-        </div>
-    </div>
-</section>
--->
+<div class="container"><div style="height: 1px; width: 100%; background: linear-gradient(90deg, transparent, var(--border-glass), transparent);"></div></div>
 
-<!-- Proyectos Destacados -->
-<section id="proyectos" class="section container" style="margin-top: var(--space-8);">
-    <div class="flex justify-between items-end mb-8" style="flex-wrap: wrap; gap: var(--space-4);">
-        <div>
-            <h2 style="font-size: 2rem; font-weight: 700;">Proyectos Destacados</h2>
-            <div style="width: 50px; height: 3px; background: var(--gradient-glow); border-radius: 2px; margin-top: 8px;"></div>
-        </div>
-        <a href="{% url 'projects:list' %}" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.4rem 0.8rem;">
-            Ver todos los proyectos <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i>
-        </a>
+<!-- Proyectos Showcase (Ancho completo) -->
+<section id="proyectos" class="container" style="padding-top: var(--space-24); padding-bottom: var(--space-24);">
+    <div class="mb-16">
+        <h2 class="title-section">Proyectos Seleccionados</h2>
+        <p class="text-secondary" style="font-size: 1.1rem; max-width: 600px;">Casos de estudio y aplicaciones desarrolladas recientemente, enfocadas en resolver problemas complejos con interfaces limpias.</p>
     </div>
     
     {% if proyectos_destacados %}
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {% for proyecto in proyectos_destacados %}
-        <div class="glass-card">
-            <div class="glass-img-wrapper">
-                {% if proyecto.imagen_portada %}
-                <img src="{{ proyecto.imagen_portada.url }}" alt="{{ proyecto.titulo }}" class="glass-img" loading="lazy">
+        <div class="project-card" style="flex-direction: column;">
+            
+            <div class="project-img-wrapper" style="width: 100%; border-right: none; border-bottom: 1px solid var(--border-glass);">
+                {% if proyecto.miniatura_youtube %}
+                <img src="{{ proyecto.miniatura_youtube.url }}" alt="{{ proyecto.titulo }}" class="project-img" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;">
+                {% elif proyecto.imagen_portada %}
+                <img src="{{ proyecto.imagen_portada.url }}" alt="{{ proyecto.titulo }}" class="project-img" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;">
                 {% else %}
-                <div class="glass-img" style="background-color: var(--bg-tertiary);"></div>
+                <div class="project-img" style="background: var(--bg-tertiary);"></div>
                 {% endif %}
-                <div class="glass-overlay"></div>
-                <div style="position: absolute; top: 1rem; right: 1rem; z-index: 10;">
-                    <span class="badge badge-{{ proyecto.estado|slugify }}">
-                        <div class="badge-dot"></div>
-                        {{ proyecto.get_estado_display }}
-                    </span>
-                </div>
             </div>
             
-            <div class="glass-content">
-                <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary);">{{ proyecto.titulo }}</h3>
-                
-                {% if proyecto.youtube_url %}
-                <div style="margin-bottom: 1.5rem; flex-grow: 1; display: flex; align-items: center; justify-content: center; position: relative;">
-                    <a href="{% url 'projects:detail' proyecto.slug %}" style="display: block; width: 100%; text-decoration: none; color: inherit;">
-                        <div style="position: relative; width: 100%; border-radius: var(--radius-md); overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
-                            {% if proyecto.miniatura_youtube %}
-                            <img src="{{ proyecto.miniatura_youtube.url }}" alt="{{ proyecto.titulo }}" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block;">
-                            {% elif proyecto.imagen_portada %}
-                            <img src="{{ proyecto.imagen_portada.url }}" alt="{{ proyecto.titulo }}" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block;">
-                            {% else %}
-                            <div style="width: 100%; aspect-ratio: 16/9; background: #000; display: flex; align-items: center; justify-content: center; color: #fff;">
-                                <i class="fa-brands fa-youtube" style="font-size: 3rem; color: #ef4444;"></i>
-                            </div>
-                            {% endif %}
-                            
-                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; background: rgba(0,0,0,0.7); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; pointer-events: none;">
-                                <i class="fa-solid fa-play" style="margin-left: 3px;"></i>
-                            </div>
-                        </div>
-                    </a>
+            <div class="project-content" style="width: 100%; padding: var(--space-6);">
+                <div class="badge" style="margin-bottom: var(--space-4); align-self: flex-start;">
+                    {{ proyecto.get_estado_display }}
                 </div>
-                {% else %}
-                <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 1.5rem; flex-grow: 1;">
-                    {{ proyecto.descripcion_formateada }}
-                </p>
-                {% endif %}
                 
-                <div class="flex gap-2" style="flex-wrap: wrap; margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.5rem; margin-bottom: var(--space-4);">{{ proyecto.titulo }}</h3>
+                
+                <p class="text-secondary" style="font-size: 0.95rem; line-height: 1.7; margin-bottom: var(--space-6);">
+                    {{ proyecto.descripcion_formateada|truncatechars:120|default:proyecto.descripcion_corta }}
+                </p>
+                
+                <div class="flex gap-2" style="flex-wrap: wrap; margin-bottom: var(--space-8);">
                     {% for tech in proyecto.tecnologias.all|slice:":3" %}
-                    <span style="font-size: 0.75rem; color: var(--text-secondary); background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 0.2rem 0.6rem; border-radius: var(--radius-sm);">{{ tech.nombre }}</span>
+                    <span style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--text-muted); border: 1px solid var(--border-color); padding: 0.1rem 0.4rem; border-radius: 4px;">{{ tech.nombre }}</span>
                     {% endfor %}
                 </div>
                 
-                <div class="flex gap-3 mt-auto">
-                    <a href="{% url 'projects:detail' proyecto.slug %}" class="btn btn-primary" style="flex: 1; text-align: center; justify-content: center;">
-                        Más Info
+                <div class="flex gap-4 mt-auto">
+                    <a href="{% url 'projects:detail' proyecto.slug %}" class="btn btn-secondary" style="font-size: 0.85rem;">
+                        Caso de Estudio
                     </a>
                     {% if proyecto.url_demo %}
-                    <a href="{{ proyecto.url_demo }}" target="_blank" class="btn btn-secondary" style="padding: 0.5rem 1rem;">
+                    <a href="{{ proyecto.url_demo }}" target="_blank" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0 0.8rem;" aria-label="Ver Demo">
                         <i class="fa-solid fa-arrow-up-right-from-square"></i>
                     </a>
                     {% endif %}
                 </div>
             </div>
+            
         </div>
         {% endfor %}
     </div>
     {% else %}
-    <div style="text-align: center; padding: 4rem 2rem; background: var(--bg-secondary); border: 1px dashed var(--border-color); border-radius: var(--radius-xl);">
-        <div style="font-size: 3rem; color: var(--text-muted); margin-bottom: 1rem;">
-            <i class="fa-regular fa-folder-open"></i>
-        </div>
-        <h3 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem;">Todavía no hay proyectos publicados</h3>
-        <p style="color: var(--text-muted);">Próximamente estarán disponibles. Vuelve más tarde.</p>
+    <div style="padding: var(--space-16); text-align: center; border: 1px solid var(--border-color); border-radius: var(--radius-xl);">
+        <p class="text-muted">Aún no hay proyectos destacados.</p>
     </div>
     {% endif %}
-</section>
-
-<!-- CTA Section -->
-<section class="section container" style="background-color: var(--bg-secondary); border-radius: var(--radius-2xl); padding: var(--space-8); margin-top: var(--space-8); margin-bottom: var(--space-16);">
-    <div class="cta-card">
-        <div style="position: relative; z-index: 2; flex: 1;">
-            <h2 style="font-size: 2.5rem; font-weight: 700; margin-bottom: var(--space-4);">¿Tienen un proyecto en mente?</h2>
-            <p class="text-muted" style="font-size: 1.1rem; line-height: 1.6; max-width: 500px; margin-bottom: var(--space-8); color: #c4b5fd;">
-                Estamos siempre abiertos a discutir nuevas oportunidades y crear soluciones increíbles juntos.
-            </p>
-            <a href="{% url 'contact:page' %}" class="btn btn-secondary" style="border-color: rgba(255,255,255,0.2);">
-                Hablemos <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i>
-            </a>
-        </div>
-        
-        <div style="position: relative; z-index: 2;">
-            <div style="width: 150px; height: 150px; border-radius: 50%; background: linear-gradient(135deg, rgba(139,92,246,0.2) 0%, rgba(217,70,239,0.2) 100%); display: flex; align-items: center; justify-content: center; font-size: 4rem; color: var(--accent-pink); box-shadow: 0 0 50px rgba(139, 92, 246, 0.3); border: 1px solid rgba(255,255,255,0.1);">
-                <i class="fa-regular fa-comment-dots"></i>
-            </div>
-        </div>
-        
-        <!-- Glow decorations -->
-        <div style="position: absolute; right: -100px; bottom: -100px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, rgba(0,0,0,0) 70%); border-radius: 50%; z-index: 1;"></div>
+    
+    <div class="flex justify-center" style="margin-top: var(--space-16);">
+        <a href="{% url 'projects:list' %}" class="btn btn-secondary">
+            Ver más proyectos
+        </a>
     </div>
 </section>
 
-<!-- Tecnologías que domino -->
-<section class="section container">
-    <div class="mb-8">
-        <h2 style="font-size: 2rem; font-weight: 700;">Tecnologías que domino</h2>
-        <div style="width: 50px; height: 3px; background: var(--gradient-glow); border-radius: 2px; margin-top: 8px;"></div>
+<!-- Immersive CTA -->
+<section class="container" style="padding-bottom: var(--space-24);">
+    <div class="cta-banner" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+        <h2 style="font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: -0.05em; font-weight: 700; margin-bottom: var(--space-4);">
+            Construyamos algo.
+        </h2>
+        <p class="text-secondary" style="font-size: 1.1rem; max-width: 500px; margin: 0 auto var(--space-8) auto; line-height: 1.6;">
+            Si estás buscando desarrollar un nuevo producto digital o mejorar uno existente, hablemos.
+        </p>
+        <a href="{% url 'contact:page' %}" class="btn btn-primary" style="padding: 0 2rem; font-size: 1rem;">
+            Iniciar Conversación
+        </a>
+    </div>
+</section>
+
+<!-- Technologies Showcase -->
+<section class="container" style="padding-bottom: var(--space-32);">
+    <div class="mb-12 text-center" style="display: flex; flex-direction: column; align-items: center;">
+        <h2 class="title-section">Stack Tecnológico</h2>
+        <p class="text-secondary" style="font-size: 1.1rem; max-width: 600px;">Herramientas que utilizo para construir productos sólidos, escalables y mantenibles.</p>
     </div>
     
-    <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         {% for tech in tecnologias %}
-        <div class="card" style="padding: var(--space-4); text-align: center; border-color: rgba(255,255,255,0.05); position: relative; overflow: hidden; background-color: var(--bg-secondary);">
-            <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 30px; background: {{ tech.color|default:'var(--accent-primary)' }}; filter: blur(25px); opacity: 0.15; z-index: 1;"></div>
-            
-            <div style="font-size: 2.5rem; margin-bottom: var(--space-2); color: {{ tech.color|default:'var(--text-primary)' }}; position: relative; z-index: 2;">
+        <div class="tech-item">
+            <div style="font-size: 1.5rem; margin-bottom: var(--space-4); color: var(--text-primary); opacity: 0.9;">
                 {% if tech.icono and 'fa-' in tech.icono %}
                     <i class="{{ tech.icono }}"></i>
                 {% elif tech.icono and '<svg' in tech.icono %}
-                    <div style="width: 2.5rem; height: 2.5rem; margin: 0 auto;">{{ tech.icono|safe }}</div>
+                    <div style="width: 24px; height: 24px;">{{ tech.icono|safe }}</div>
                 {% else %}
                     <i class="fa-solid fa-code"></i>
                 {% endif %}
             </div>
-            <h4 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.25rem; position: relative; z-index: 2;">{{ tech.nombre }}</h4>
+            <h4 style="font-size: 0.9rem; font-weight: 500; color: var(--text-primary);">{{ tech.nombre }}</h4>
+            <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); margin-top: 2px;">Core</span>
         </div>
         {% endfor %}
     </div>

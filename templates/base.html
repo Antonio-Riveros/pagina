@@ -6,47 +6,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Portafolio{% endblock %}</title>
     
-    <!-- Meta Tags -->
     <meta name="description" content="{% block meta_description %}Portfolio profesional con proyectos, videos y más.{% endblock %}">
     <meta name="color-scheme" content="dark">
-    <meta name="theme-color" content="#090a0f">
+    <meta name="theme-color" content="#000000">
+    
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- CSS -->
-    <link rel="stylesheet" href="{% static 'css/main.css' %}?v=2">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}?v=4">
     
-    <!-- FontAwesome para íconos -->
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.9.10" defer></script>
     
     <!-- JS Vanilla -->
-    <script src="{% static 'js/main.js' %}?v=3" defer></script>
+    <script src="{% static 'js/main.js' %}?v=4" defer></script>
     
     {% block extra_head %}{% endblock %}
 </head>
 <body htmx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     
-    <nav class="navbar">
-        <div class="container flex justify-between items-center">
-            <a href="{% url 'home' %}" style="font-weight: 700; font-size: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
-                <span class="text-gradient" style="font-family: var(--font-mono);">&lt;/&gt;</span> Portafolio
+    <!-- Mesh Gradient Background Core -->
+    <div style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: radial-gradient(circle at 15% 50%, rgba(124, 58, 237, 0.05), transparent 25%), radial-gradient(circle at 85% 30%, rgba(124, 58, 237, 0.03), transparent 25%); z-index: -10; pointer-events: none;"></div>
+    
+    <!-- Navbar Ultra Minimal -->
+    <nav class="navbar" style="position: sticky; top: 0; z-index: 100; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-glass); background: rgba(0,0,0,0.6);">
+        <div class="container flex justify-between items-center" style="padding-top: var(--space-4); padding-bottom: var(--space-4);">
+            <a href="{% url 'home' %}" style="font-weight: 800; font-size: 1.4rem; text-decoration: none; color: var(--text-primary); letter-spacing: -0.05em; display: flex; align-items: center; gap: 0.5rem;">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-primary);"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg>
+                gedari
             </a>
             
-            <div class="nav-links">
+            <div class="nav-links" style="display: flex; gap: var(--space-8); align-items: center;">
                 <a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Inicio</a>
                 <a href="{% url 'projects:list' %}" class="nav-link {% if request.resolver_match.app_name == 'projects' %}active{% endif %}">Proyectos</a>
-                <a href="{% url 'contact:page' %}" class="nav-link {% if request.resolver_match.app_name == 'contact' %}active{% endif %}">Contacto</a>
+                <a href="{% url 'videos:library' %}" class="nav-link {% if request.resolver_match.app_name == 'videos' %}active{% endif %}">Videos</a>
             </div>
             
             <div class="flex items-center gap-4">
-                <button style="background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 1.1rem; padding: 0.5rem;">
-                    <i class="fa-regular fa-moon"></i>
-                </button>
+                <a href="{% url 'contact:page' %}" class="btn btn-primary" style="font-size: 0.85rem; padding: 0.4rem 1rem; height: auto;">
+                    Contáctanos
+                </a>
             </div>
         </div>
     </nav>
@@ -55,71 +60,54 @@
         {% block content %}{% endblock %}
     </main>
     
-    <footer style="position: relative; padding: var(--space-12) 0 var(--space-6) 0; border-top: 1px solid var(--border-color); margin-top: auto; background-color: var(--bg-main);">
+    <!-- Footer Architectural -->
+    <footer style="border-top: 1px solid var(--border-glass); padding: var(--space-16) 0 var(--space-8) 0; margin-top: var(--space-32); position: relative; overflow: hidden;">
         <div class="container">
-            <div class="grid md:grid-cols-4 gap-8 mb-8" style="flex-wrap: wrap;">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
                 
-                <!-- Col 1 -->
-                <div style="grid-column: span 1; md:grid-column: span 1;">
-                    <a href="{% url 'home' %}" style="font-weight: 700; font-size: 1.25rem; display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-4);">
-                        <span class="text-gradient" style="font-family: var(--font-mono);">&lt;/&gt;</span> Portafolio
+                <div style="grid-column: span 2; max-width: 400px;">
+                    <a href="{% url 'home' %}" style="font-weight: 800; font-size: 1.4rem; text-decoration: none; color: var(--text-primary); letter-spacing: -0.05em; display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-4);">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg>
+                        gedari
                     </a>
-                    <p class="text-muted" style="font-size: 0.85rem; margin-bottom: var(--space-4);">
-                        Construyendo el futuro, línea por línea.
+                    <p class="text-muted" style="font-size: 0.9rem; line-height: 1.6; margin-bottom: var(--space-6);">
+                        Ingeniería de software, diseño de interfaces y arquitectura de sistemas. Construyendo productos digitales que escalan.
                     </p>
-                    <p class="text-muted" style="font-size: 0.75rem;">
-                        &copy; {% now "Y" %} Tu Nombre. Todos los derechos reservados.
-                    </p>
-                </div>
-                
-                <!-- Cols Links -->
-                <div class="flex gap-8" style="grid-column: span 2; flex-wrap: wrap;">
-                    <div style="flex: 1; min-width: 120px;">
-                        <h4 style="font-size: 0.9rem; font-weight: 600; margin-bottom: var(--space-4);">Navegación</h4>
-                        <div class="flex flex-col gap-2">
-                            <a href="{% url 'home' %}" class="text-secondary" style="font-size: 0.85rem;">Inicio</a>
-                            <a href="{% url 'projects:list' %}" class="text-secondary" style="font-size: 0.85rem;">Proyectos</a>
-                            <a href="{% url 'videos:library' %}" class="text-secondary" style="font-size: 0.85rem;">Videos</a>
-                            <a href="{% url 'contact:page' %}" class="text-secondary" style="font-size: 0.85rem;">Contacto</a>
-                        </div>
-                    </div>
-                    <div style="flex: 1; min-width: 120px;">
-                        <h4 style="font-size: 0.9rem; font-weight: 600; margin-bottom: var(--space-4);">Recursos</h4>
-                        <div class="flex flex-col gap-2">
-                            <a href="#" class="text-secondary" style="font-size: 0.85rem;">GitHub</a>
-                            <a href="#" class="text-secondary" style="font-size: 0.85rem;">LinkedIn</a>
-                            <a href="#" class="text-secondary" style="font-size: 0.85rem;">Twitter</a>
-                            <a href="#" class="text-secondary" style="font-size: 0.85rem;">Email</a>
-                        </div>
-                    </div>
-                    <div style="flex: 1; min-width: 120px;">
-                        <h4 style="font-size: 0.9rem; font-weight: 600; margin-bottom: var(--space-4);">Tecnologías</h4>
-                        <div class="flex flex-col gap-2">
-                            <span class="text-secondary" style="font-size: 0.85rem;">Python</span>
-                            <span class="text-secondary" style="font-size: 0.85rem;">Django</span>
-                            <span class="text-secondary" style="font-size: 0.85rem;">JavaScript</span>
-                            <span class="text-secondary" style="font-size: 0.85rem;">PostgreSQL</span>
-                        </div>
+                    <div style="display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; border: 1px solid var(--border-color); padding: 0.25rem 0.75rem; border-radius: var(--radius-full); color: var(--text-secondary);">
+                        <span style="width: 6px; height: 6px; background: #10b981; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #10b981;"></span>
+                        Disponible
                     </div>
                 </div>
                 
-                <!-- Col 4 CTA -->
-                <div style="grid-column: span 1; display: flex; flex-direction: column; align-items: flex-start;">
-                    <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); margin-bottom: var(--space-2);">
-                        Disponible para proyectos <div class="badge-dot"></div>
+                <div>
+                    <h4 style="font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-4);">Plataforma</h4>
+                    <div class="flex flex-col gap-3">
+                        <a href="{% url 'home' %}" class="text-secondary" style="font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">Inicio</a>
+                        <a href="{% url 'projects:list' %}" class="text-secondary" style="font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">Proyectos</a>
+                        <a href="{% url 'videos:library' %}" class="text-secondary" style="font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">Videos</a>
                     </div>
-                    <a href="{% url 'contact:page' %}" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.4rem 0.8rem; border-color: rgba(255,255,255,0.1);">
-                        <i class="fa-regular fa-envelope" style="margin-right: 8px;"></i> Contactar
-                    </a>
+                </div>
+                
+                <div>
+                    <h4 style="font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-4);">Redes</h4>
+                    <div class="flex flex-col gap-3">
+                        <a href="#" class="text-secondary" style="font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">GitHub</a>
+                        <a href="#" class="text-secondary" style="font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">LinkedIn</a>
+                        <a href="#" class="text-secondary" style="font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">Twitter</a>
+                    </div>
                 </div>
                 
             </div>
             
+            <div style="border-top: 1px solid var(--border-glass); padding-top: var(--space-6); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4);">
+                <p class="text-muted" style="font-size: 0.85rem;">
+                    &copy; {% now "Y" %} gedari. Todos los derechos reservados.
+                </p>
+                <div class="flex gap-4">
+                    <span class="text-muted" style="font-size: 0.85rem;">Construido con Django</span>
+                </div>
+            </div>
         </div>
-        
-        <button onclick="window.scrollTo({top:0, behavior:'smooth'})" style="position: absolute; right: 2rem; background: var(--bg-secondary); border: 1px solid var(--border-color); color: var(--text-secondary); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all var(--transition-fast);">
-            <i class="fa-solid fa-arrow-up"></i>
-        </button>
     </footer>
     
 </body>
