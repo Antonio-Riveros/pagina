@@ -11,8 +11,8 @@
             </div>
             
             <h1 class="hero-title">
-                Construyendo el futuro<br>
-                <span class="text-gradient">línea por línea</span><span style="color: var(--accent-pink); animation: blink 1s step-end infinite;">_</span>
+                {{ config.titulo_principal }}<br>
+                <span class="text-gradient">{{ config.subtitulo_destacado }}</span>
             </h1>
             
             <style>
@@ -35,7 +35,7 @@
             </style>
             
             <p class="text-muted hero-subtitle">
-                Creamos soluciones digitales robustas.
+                {{ config.descripcion }}
             </p>
             
             <div class="hero-btns">
@@ -50,10 +50,15 @@
         
         <div style="position: relative; z-index: 1;">
             <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120%; height: 120%; background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(0,0,0,0) 60%); z-index: -1;"></div>
-            
-            <div style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-2xl); aspect-ratio: 16/11; overflow: hidden; position: relative; box-shadow: var(--shadow-lg);">
-                <div style="position: absolute; inset: 0; background: linear-gradient(145deg, #1e1b4b 0%, #171717 100%); display: flex; align-items: center; justify-content: center; color: var(--text-muted);">
-                    <i class="fa-solid fa-laptop-code" style="font-size: 5rem; opacity: 0.2;"></i>
+            <!-- Right Image/Graphic -->
+            <div style="flex: 1; min-width: 300px; display: flex; justify-content: center; align-items: center; padding: 2rem;">
+                <div class="glass-panel" style="width: 100%; max-width: 500px; aspect-ratio: 4/3; border-radius: 20px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.4);">
+                    {% if config.imagen_hero %}
+                    <img src="{{ config.imagen_hero.url }}" alt="{{ config.titulo_principal }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    {% else %}
+                    <div style="position: absolute; width: 150%; height: 150%; background: radial-gradient(circle, rgba(168,85,247,0.1) 0%, rgba(0,0,0,0) 70%); animation: pulse 4s infinite;"></div>
+                    <i class="fa-solid fa-laptop-code" style="font-size: 5rem; color: rgba(255,255,255,0.05); z-index: 1;"></i>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -110,29 +115,106 @@
     </div>
     
     {% if proyectos_destacados %}
-    <div class="grid md:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {% for proyecto in proyectos_destacados %}
-        <a href="{% url 'projects:detail' proyecto.slug %}" class="card">
-            <div class="card-img-wrapper">
-                {% if proyecto.imagen_principal %}
-                <img src="{{ proyecto.imagen_principal.url }}" alt="{{ proyecto.titulo }}" class="card-img" loading="lazy">
+        <div class="glass-card">
+            <div class="glass-img-wrapper">
+                {% if proyecto.imagen_portada %}
+                <img src="{{ proyecto.imagen_portada.url }}" alt="{{ proyecto.titulo }}" class="glass-img" loading="lazy">
                 {% else %}
-                <div class="card-img" style="background-color: var(--bg-tertiary);"></div>
+                <div class="glass-img" style="background-color: var(--bg-tertiary);"></div>
                 {% endif %}
-            </div>
-            <div class="card-body">
-                <h3 class="card-title">{{ proyecto.titulo }}</h3>
-                <p class="card-text">{{ proyecto.resumen }}</p>
-                <div class="flex gap-2" style="flex-wrap: wrap;">
-                    {% for tech in proyecto.tecnologias.all|slice:":3" %}
-                    <span class="badge" style="background: transparent; padding: 0.1rem 0.5rem; font-size: 0.7rem;">{{ tech.nombre }}</span>
-                    {% endfor %}
+                <div class="glass-overlay"></div>
+                <div style="position: absolute; top: 1rem; right: 1rem; z-index: 10;">
+                    <span class="badge badge-{{ proyecto.estado|slugify }}">
+                        <div class="badge-dot"></div>
+                        {{ proyecto.get_estado_display }}
+                    </span>
                 </div>
             </div>
-        </a>
+            
+            <div class="glass-content">
+                <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary);">{{ proyecto.titulo }}</h3>
+                
+                {% if proyecto.youtube_url %}
+                <div style="margin-bottom: 1.5rem; flex-grow: 1; display: flex; align-items: center; justify-content: center; position: relative;">
+                    <a href="{% url 'projects:detail' proyecto.slug %}" style="display: block; width: 100%; text-decoration: none; color: inherit;">
+                        <div style="position: relative; width: 100%; border-radius: var(--radius-md); overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                            {% if proyecto.miniatura_youtube %}
+                            <img src="{{ proyecto.miniatura_youtube.url }}" alt="{{ proyecto.titulo }}" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block;">
+                            {% elif proyecto.imagen_portada %}
+                            <img src="{{ proyecto.imagen_portada.url }}" alt="{{ proyecto.titulo }}" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block;">
+                            {% else %}
+                            <div style="width: 100%; aspect-ratio: 16/9; background: #000; display: flex; align-items: center; justify-content: center; color: #fff;">
+                                <i class="fa-brands fa-youtube" style="font-size: 3rem; color: #ef4444;"></i>
+                            </div>
+                            {% endif %}
+                            
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; background: rgba(0,0,0,0.7); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; pointer-events: none;">
+                                <i class="fa-solid fa-play" style="margin-left: 3px;"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% else %}
+                <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 1.5rem; flex-grow: 1;">
+                    {{ proyecto.descripcion_formateada }}
+                </p>
+                {% endif %}
+                
+                <div class="flex gap-2" style="flex-wrap: wrap; margin-bottom: 1.5rem;">
+                    {% for tech in proyecto.tecnologias.all|slice:":3" %}
+                    <span style="font-size: 0.75rem; color: var(--text-secondary); background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 0.2rem 0.6rem; border-radius: var(--radius-sm);">{{ tech.nombre }}</span>
+                    {% endfor %}
+                </div>
+                
+                <div class="flex gap-3 mt-auto">
+                    <a href="{% url 'projects:detail' proyecto.slug %}" class="btn btn-primary" style="flex: 1; text-align: center; justify-content: center;">
+                        Más Info
+                    </a>
+                    {% if proyecto.url_demo %}
+                    <a href="{{ proyecto.url_demo }}" target="_blank" class="btn btn-secondary" style="padding: 0.5rem 1rem;">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
         {% endfor %}
     </div>
+    {% else %}
+    <div style="text-align: center; padding: 4rem 2rem; background: var(--bg-secondary); border: 1px dashed var(--border-color); border-radius: var(--radius-xl);">
+        <div style="font-size: 3rem; color: var(--text-muted); margin-bottom: 1rem;">
+            <i class="fa-regular fa-folder-open"></i>
+        </div>
+        <h3 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem;">Todavía no hay proyectos publicados</h3>
+        <p style="color: var(--text-muted);">Próximamente estarán disponibles. Vuelve más tarde.</p>
+    </div>
     {% endif %}
+</section>
+
+<!-- CTA Section -->
+<section class="section container" style="background-color: var(--bg-secondary); border-radius: var(--radius-2xl); padding: var(--space-8); margin-top: var(--space-8); margin-bottom: var(--space-16);">
+    <div class="cta-card">
+        <div style="position: relative; z-index: 2; flex: 1;">
+            <h2 style="font-size: 2.5rem; font-weight: 700; margin-bottom: var(--space-4);">¿Tienen un proyecto en mente?</h2>
+            <p class="text-muted" style="font-size: 1.1rem; line-height: 1.6; max-width: 500px; margin-bottom: var(--space-8); color: #c4b5fd;">
+                Estamos siempre abiertos a discutir nuevas oportunidades y crear soluciones increíbles juntos.
+            </p>
+            <a href="{% url 'contact:page' %}" class="btn btn-secondary" style="border-color: rgba(255,255,255,0.2);">
+                Hablemos <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i>
+            </a>
+        </div>
+        
+        <div style="position: relative; z-index: 2;">
+            <div style="width: 150px; height: 150px; border-radius: 50%; background: linear-gradient(135deg, rgba(139,92,246,0.2) 0%, rgba(217,70,239,0.2) 100%); display: flex; align-items: center; justify-content: center; font-size: 4rem; color: var(--accent-pink); box-shadow: 0 0 50px rgba(139, 92, 246, 0.3); border: 1px solid rgba(255,255,255,0.1);">
+                <i class="fa-regular fa-comment-dots"></i>
+            </div>
+        </div>
+        
+        <!-- Glow decorations -->
+        <div style="position: absolute; right: -100px; bottom: -100px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, rgba(0,0,0,0) 70%); border-radius: 50%; z-index: 1;"></div>
+    </div>
 </section>
 
 <!-- Tecnologías que domino -->
@@ -159,30 +241,6 @@
             <h4 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.25rem; position: relative; z-index: 2;">{{ tech.nombre }}</h4>
         </div>
         {% endfor %}
-    </div>
-</section>
-
-<!-- CTA Section -->
-<section class="section container" style="background-color: var(--bg-secondary); border-radius: var(--radius-2xl); padding: var(--space-8); margin-top: var(--space-8); margin-bottom: var(--space-16);">
-    <div class="cta-card">
-        <div style="position: relative; z-index: 2; flex: 1;">
-            <h2 style="font-size: 2.5rem; font-weight: 700; margin-bottom: var(--space-4);">¿Tienen un proyecto en mente?</h2>
-            <p class="text-muted" style="font-size: 1.1rem; line-height: 1.6; max-width: 500px; margin-bottom: var(--space-8); color: #c4b5fd;">
-                Estamos siempre abiertos a discutir nuevas oportunidades y crear soluciones increíbles juntos.
-            </p>
-            <a href="{% url 'contact:page' %}" class="btn btn-secondary" style="border-color: rgba(255,255,255,0.2);">
-                Hablemos <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i>
-            </a>
-        </div>
-        
-        <div style="position: relative; z-index: 2;">
-            <div style="width: 150px; height: 150px; border-radius: 50%; background: linear-gradient(135deg, rgba(139,92,246,0.2) 0%, rgba(217,70,239,0.2) 100%); display: flex; align-items: center; justify-content: center; font-size: 4rem; color: var(--accent-pink); box-shadow: 0 0 50px rgba(139, 92, 246, 0.3); border: 1px solid rgba(255,255,255,0.1);">
-                <i class="fa-regular fa-comment-dots"></i>
-            </div>
-        </div>
-        
-        <!-- Glow decorations -->
-        <div style="position: absolute; right: -100px; bottom: -100px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, rgba(0,0,0,0) 70%); border-radius: 50%; z-index: 1;"></div>
     </div>
 </section>
 {% endblock %}

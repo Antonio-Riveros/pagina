@@ -76,8 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
             keySequence = keySequence.slice(-secretCode.length);
         }
         
-        if (keySequence === secretCode) {
-            window.location.href = '/admin/';
+        if (keySequence === 'ccd2') {
+            window.location.href = '/panel/login/';
         }
     });
 });

@@ -1,7 +1,18 @@
 from django.contrib import admin
-from django.utils.html import mark_safe
+from django.utils.html import format_html, mark_safe
 from .models import Category, Technology, Project, Capture
-from videos.models import Video
+
+@admin.action(description="Publicar proyectos seleccionados")
+def make_published(modeladmin, request, queryset):
+    queryset.update(estado_publicacion='publicado')
+
+@admin.action(description="Pasar a borrador seleccionados")
+def make_draft(modeladmin, request, queryset):
+    queryset.update(estado_publicacion='borrador')
+
+@admin.action(description="Destacar seleccionados")
+def make_featured(modeladmin, request, queryset):
+    queryset.update(destacado=True)
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -36,52 +47,67 @@ class CaptureInline(admin.TabularInline):
         return "-"
     imagen_preview.short_description = "Preview"
 
-class VideoInline(admin.StackedInline):
-    model = Video
-    extra = 1
-    fields = ('titulo', 'youtube_url', 'miniatura_preview', 'orden', 'destacado', 'publicado')
-    readonly_fields = ('miniatura_preview',)
-    
-    def miniatura_preview(self, obj):
-        if obj.miniatura:
-            return mark_safe(f'<img src="{obj.miniatura.url}" style="max-height: 100px; border-radius: 4px;" />')
-        return "-"
-    miniatura_preview.short_description = "Miniatura"
-
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('titulo', 'imagen_preview', 'estado', 'destacado', 'publicado', 'orden')
-    list_editable = ('estado', 'destacado', 'publicado', 'orden')
-    list_filter = ('estado', 'destacado', 'publicado', 'categorias', 'tecnologias')
-    search_fields = ('titulo', 'resumen', 'descripcion_larga')
+    list_display = ('orden', 'titulo', 'estado', 'estado_publicacion', 'destacado', 'portada_preview', 'ver_en_sitio')
+    list_editable = ('estado', 'estado_publicacion', 'destacado', 'orden')
+    list_display_links = ('titulo', 'portada_preview')
+    list_filter = ('estado_publicacion', 'estado', 'destacado', 'categorias')
+    search_fields = ('titulo', 'descripcion_corta', 'youtube_id')
     prepopulated_fields = {'slug': ('titulo',)}
-    inlines = [CaptureInline, VideoInline]
+    readonly_fields = ('portada_preview', 'youtube_id', 'youtube_preview', 'fecha_actualizacion')
+    inlines = [CaptureInline]
     filter_horizontal = ('categorias', 'tecnologias')
+    ordering = ('orden', '-fecha_creacion')
+    actions = [make_published, make_draft, make_featured]
     
     fieldsets = (
         ('Información Principal', {
-            'fields': ('titulo', 'slug', 'resumen', 'descripcion_larga')
+            'fields': ('titulo', 'slug', 'descripcion_corta', 'descripcion_larga')
         }),
         ('Multimedia', {
-            'fields': ('imagen_principal', 'logo')
+            'fields': ('imagen_portada', 'portada_preview')
         }),
-        ('Configuración y Estado', {
-            'fields': ('estado', 'destacado', 'publicado', 'orden')
+        ('Integración YouTube', {
+            'description': 'Solo pega el enlace. El ID, la miniatura y el reproductor se generan automáticamente al guardar.',
+            'fields': ('youtube_url', 'youtube_id', 'youtube_preview', 'miniatura_youtube')
         }),
-        ('Enlaces', {
+        ('Estado y Configuración', {
+            'fields': ('estado', 'estado_publicacion', 'destacado', 'orden', 'fecha_creacion')
+        }),
+        ('Enlaces Externos', {
             'fields': ('url_demo', 'url_github', 'url_cliente')
         }),
-        ('Relaciones', {
+        ('Clasificación', {
             'fields': ('categorias', 'tecnologias')
         }),
-        ('SEO', {
-            'fields': ('meta_title', 'meta_description'),
-            'classes': ('collapse',)
+        ('SEO (Opcional)', {
+            'classes': ('collapse',),
+            'description': 'Si lo dejas en blanco, se generarán automáticamente a partir del título y la descripción.',
+            'fields': ('meta_title', 'meta_description')
         }),
     )
 
-    def imagen_preview(self, obj):
-        if obj.imagen_principal:
-            return mark_safe(f'<img src="{obj.imagen_principal.url}" style="max-height: 50px; border-radius: 4px;" />')
+    def portada_preview(self, obj):
+        if obj.imagen_portada:
+            return format_html('<img src="{}" style="max-height: 50px; border-radius: 4px;" />', obj.imagen_portada.url)
         return "-"
-    imagen_preview.short_description = "Imagen"
+    portada_preview.short_description = "Portada"
+    
+    def youtube_preview(self, obj):
+        if obj.miniatura_youtube:
+            return format_html(
+                '<a href="{}" target="_blank"><img src="{}" style="max-height: 100px; border-radius: 8px; border: 2px solid #e5e7eb;" /></a>',
+                obj.youtube_url, obj.miniatura_youtube.url
+            )
+        return "No hay video asociado."
+    youtube_preview.short_description = "Miniatura YouTube"
+    
+    def ver_en_sitio(self, obj):
+        if obj.pk:
+            return format_html(
+                '<a class="button" href="/proyectos/{}" target="_blank">Ver <i class="fa-solid fa-arrow-up-right-from-square"></i></a>',
+                obj.slug
+            )
+        return "-"
+    ver_en_sitio.short_description = "Acción"

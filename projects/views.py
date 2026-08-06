@@ -1,27 +1,19 @@
-from django.shortcuts import render, get_object_or_404
-from django.db.models import Q
-from .models import Project, Category, Technology
+from django.views.generic import ListView, DetailView
+from .models import Project
 
-def project_list(request):
-    proyectos = Project.objects.filter(publicado=True)
-    query = request.GET.get('q', '')
+class ProjectListView(ListView):
+    model = Project
+    template_name = 'projects/list.html'
+    context_object_name = 'proyectos'
     
-    if query:
-        proyectos = proyectos.filter(
-            Q(titulo__icontains=query) | 
-            Q(resumen__icontains=query) |
-            Q(tecnologias__nombre__icontains=query) |
-            Q(categorias__nombre__icontains=query)
-        ).distinct()
+    def get_queryset(self):
+        # Usar prefetch_related para evitar el problema N+1 con tecnologías
+        return Project.objects.filter(estado_publicacion='publicado').prefetch_related('tecnologias').order_by('orden', '-fecha_creacion')
         
-    if request.htmx:
-        return render(request, 'projects/partials/_project_list.html', {'proyectos': proyectos})
-        
-    return render(request, 'projects/list.html', {
-        'proyectos': proyectos,
-        'query': query,
-    })
-
-def project_detail(request, slug):
-    proyecto = get_object_or_404(Project, slug=slug, publicado=True)
-    return render(request, 'projects/detail.html', {'proyecto': proyecto})
+class ProjectDetailView(DetailView):
+    model = Project
+    template_name = 'projects/detail.html'
+    context_object_name = 'proyecto'
+    
+    def get_queryset(self):
+        return Project.objects.filter(estado_publicacion='publicado').prefetch_related('tecnologias', 'capturas')

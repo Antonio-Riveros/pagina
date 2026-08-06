@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Panel | Portfolio CMS{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/panel.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="panel-mode">
+
+    <!-- Sidebar -->
+    <aside class="panel-sidebar">
+        <a href="{% url 'panel:dashboard' %}" class="panel-logo">
+            <i class="fa-solid fa-code"></i> CMS
+        </a>
+        
+        <nav class="panel-nav">
+            <a href="{% url 'panel:dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                <i class="fa-solid fa-chart-pie"></i> Dashboard
+            </a>
+            <div style="margin: 1rem 0 0.5rem 0; font-size: 0.75rem; text-transform: uppercase; color: var(--panel-text-muted); font-weight: 700; letter-spacing: 0.05em; padding-left: 1rem;">Contenido</div>
+            <a href="{% url 'panel:home_config' %}" class="panel-nav-item {% if request.resolver_match.url_name == 'home_config' %}active{% endif %}">
+                <i class="fa-solid fa-home"></i> Inicio (Hero)
+            </a>
+            
+            <a href="{% url 'panel:project_list' %}" class="panel-nav-item {% if 'project' in request.resolver_match.url_name %}active{% endif %}">
+                <i class="fa-solid fa-folder-open"></i> Proyectos
+            </a>
+            <!-- Futuros enlaces a Videos, Categorías, etc. -->
+        </nav>
+        
+        <div style="margin-top: auto; display: flex; flex-direction: column; gap: 0.5rem; padding-bottom: 0.5rem;">
+            <a href="{% url 'home' %}" target="_blank" class="btn-panel" style="width: 100%; justify-content: center; background: rgba(255,255,255,0.05); color: #fff; border-color: rgba(255,255,255,0.1);">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Ver Sitio
+            </a>
+            <form action="{% url 'panel:logout' %}" method="post" style="width: 100%; margin: 0;">
+                {% csrf_token %}
+                <button type="submit" class="btn-panel btn-panel-danger" style="width: 100%; justify-content: center;">
+                    <i class="fa-solid fa-right-from-bracket"></i> Salir
+                </button>
+            </form>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="panel-main">
+        {% block content %}{% endblock %}
+    </main>
+
+</body>
+</html>

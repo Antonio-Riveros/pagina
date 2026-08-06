@@ -1,9 +1,9 @@
 from django.urls import path
-from . import views
+from .views import ProjectListView, ProjectDetailView
 
 app_name = 'projects'
 
 urlpatterns = [
-    path('', views.project_list, name='list'),
-    path('<slug:slug>/', views.project_detail, name='detail'),
+    path('', ProjectListView.as_view(), name='list'),
+    path('<slug:slug>/', ProjectDetailView.as_view(), name='detail'),
 ]

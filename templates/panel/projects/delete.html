@@ -1,0 +1,37 @@
+{% extends 'panel/base_panel.html' %}
+
+{% block title %}Eliminar Proyecto | Panel{% endblock %}
+
+{% block content %}
+<div class="panel-header">
+    <div>
+        <a href="{% url 'panel:project_list' %}" style="color: var(--panel-text-muted); text-decoration: none; margin-bottom: 0.5rem; display: inline-block;">
+            <i class="fa-solid fa-arrow-left"></i> Volver a Proyectos
+        </a>
+        <h1 class="panel-title">Eliminar Proyecto</h1>
+    </div>
+</div>
+
+<div class="panel-card" style="max-width: 600px; margin: 0 auto; text-align: center; padding: 3rem 2rem;">
+    <div style="font-size: 4rem; color: var(--panel-danger); margin-bottom: 1.5rem;">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+    </div>
+    
+    <h2 style="margin-top: 0; color: #fff;">¿Estás seguro de que deseas eliminar este proyecto?</h2>
+    
+    <div style="background: rgba(255,255,255,0.05); border: 1px solid var(--panel-border); border-radius: 8px; padding: 1rem; margin: 2rem 0;">
+        <h3 style="margin: 0 0 0.5rem 0; color: var(--panel-accent);">{{ object.titulo }}</h3>
+        <p style="margin: 0; color: var(--panel-text-muted); font-size: 0.9rem;">Esta acción no se puede deshacer.</p>
+    </div>
+    
+    <form method="post" style="display: flex; gap: 1rem; justify-content: center;">
+        {% csrf_token %}
+        <a href="{% url 'panel:project_list' %}" class="btn-panel" style="background: rgba(255,255,255,0.1); border: 1px solid var(--panel-border);">
+            Cancelar
+        </a>
+        <button type="submit" class="btn-panel btn-panel-danger">
+            <i class="fa-solid fa-trash"></i> Sí, eliminar para siempre
+        </button>
+    </form>
+</div>
+{% endblock %}

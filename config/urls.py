@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import RedirectView
 from core import views as core_views
 
 urlpatterns = [
@@ -10,6 +11,8 @@ urlpatterns = [
     path('proyectos/', include('projects.urls')),
     path('videos/', include('videos.urls')),
     path('contacto/', include('contact.urls')),
+    path('panel/', include('panel.urls')),
+    path('ccd2/', RedirectView.as_view(url='/panel/login/')),
 ]
 
 if settings.DEBUG:

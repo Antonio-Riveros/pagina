@@ -19,7 +19,7 @@
     <script src="https://unpkg.com/htmx.org@1.9.10" defer></script>
     
     <!-- JS Vanilla -->
-    <script src="{% static 'js/main.js' %}" defer></script>
+    <script src="{% static 'js/main.js' %}?v=2" defer></script>
     
     {% block extra_head %}{% endblock %}
 </head>
@@ -34,8 +34,6 @@
             <div class="nav-links">
                 <a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Inicio</a>
                 <a href="{% url 'projects:list' %}" class="nav-link {% if request.resolver_match.app_name == 'projects' %}active{% endif %}">Proyectos</a>
-                <a href="{% url 'videos:library' %}" class="nav-link {% if request.resolver_match.app_name == 'videos' %}active{% endif %}">Videos</a>
-                <a href="#" class="nav-link">Tecnologías</a>
                 <a href="{% url 'contact:page' %}" class="nav-link {% if request.resolver_match.app_name == 'contact' %}active{% endif %}">Contacto</a>
             </div>
             

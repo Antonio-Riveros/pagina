@@ -1,0 +1,89 @@
+{% extends 'panel/base_panel.html' %}
+
+{% block title %}Proyectos | Panel{% endblock %}
+
+{% block content %}
+<div class="panel-header">
+    <h1 class="panel-title">Proyectos</h1>
+    <a href="{% url 'panel:project_create' %}" class="btn-panel btn-panel-primary">
+        <i class="fa-solid fa-plus"></i> Nuevo Proyecto
+    </a>
+</div>
+
+<div class="panel-card" style="padding: 0;">
+    {% if proyectos %}
+    <table class="panel-table">
+        <thead>
+            <tr>
+                <th style="width: 50px;">Ord.</th>
+                <th>Portada</th>
+                <th>Título</th>
+                <th>Estado</th>
+                <th>Publicación</th>
+                <th style="text-align: right;">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for proyecto in proyectos %}
+            <tr style="transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'">
+                <td style="color: var(--panel-text-muted); font-weight: 600;">{{ proyecto.orden }}</td>
+                <td>
+                    {% if proyecto.imagen_portada %}
+                    <img src="{{ proyecto.imagen_portada.url }}" style="width: 48px; height: 48px; object-fit: cover; border-radius: 6px; border: 1px solid var(--panel-border);">
+                    {% else %}
+                    <div style="width: 48px; height: 48px; background: rgba(0,0,0,0.3); border-radius: 6px; border: 1px solid var(--panel-border); display:flex; align-items:center; justify-content:center; color: var(--panel-text-muted);">
+                        <i class="fa-solid fa-image"></i>
+                    </div>
+                    {% endif %}
+                </td>
+                <td>
+                    <div style="font-weight: 600; margin-bottom: 0.25rem;">{{ proyecto.titulo }}</div>
+                    {% if proyecto.destacado %}
+                    <span style="font-size: 0.7rem; background: rgba(139, 92, 246, 0.2); color: var(--panel-accent); padding: 0.1rem 0.4rem; border-radius: 4px; text-transform: uppercase; font-weight: 700;">Destacado</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <span style="font-size: 0.8rem; border: 1px solid var(--panel-border); padding: 0.2rem 0.5rem; border-radius: 20px;">
+                        {{ proyecto.get_estado_display }}
+                    </span>
+                </td>
+                <td>
+                    {% if proyecto.estado_publicacion == 'publicado' %}
+                    <span style="font-size: 0.8rem; background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 0.2rem 0.5rem; border-radius: 20px; font-weight: 600;">
+                        Publicado
+                    </span>
+                    {% else %}
+                    <span style="font-size: 0.8rem; background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); padding: 0.2rem 0.5rem; border-radius: 20px; font-weight: 600;">
+                        Borrador
+                    </span>
+                    {% endif %}
+                </td>
+                <td style="text-align: right;">
+                    <a href="{% url 'projects:detail' proyecto.slug %}" target="_blank" class="btn-panel" style="padding: 0.4rem; color: var(--panel-text-muted);" title="Ver en el sitio">
+                        <i class="fa-solid fa-eye"></i>
+                    </a>
+                    <a href="{% url 'panel:project_update' proyecto.pk %}" class="btn-panel" style="padding: 0.4rem; color: #60a5fa;" title="Editar">
+                        <i class="fa-solid fa-pen"></i>
+                    </a>
+                    <a href="{% url 'panel:project_delete' proyecto.pk %}" class="btn-panel" style="padding: 0.4rem; color: var(--panel-danger);" title="Eliminar">
+                        <i class="fa-solid fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div style="padding: 6rem 2rem; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); border-radius: 16px; border: 1px dashed rgba(255,255,255,0.1); margin: 2rem;">
+        <div style="width: 80px; height: 80px; background: rgba(139, 92, 246, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: var(--panel-accent); margin-bottom: 1.5rem; box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);">
+            <i class="fa-solid fa-folder-plus"></i>
+        </div>
+        <h3 style="margin-top: 0; color: #fff; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;">Aún no hay proyectos</h3>
+        <p style="color: var(--panel-text-muted); margin-bottom: 2rem; text-align: center; max-width: 400px; line-height: 1.5;">Empieza a construir tu portfolio agregando tu primer proyecto. Podrás configurarlo, añadirle media y publicarlo al instante.</p>
+        <a href="{% url 'panel:project_create' %}" class="btn-panel btn-panel-primary" style="padding: 0.75rem 1.5rem; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);">
+            <i class="fa-solid fa-plus"></i> Crear mi primer Proyecto
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

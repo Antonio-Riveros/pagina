@@ -1,0 +1,266 @@
+{% extends 'panel/base_panel.html' %}
+
+{% block title %}{{ title }} | Panel{% endblock %}
+
+{% block content %}
+<div class="panel-header">
+    <div>
+        <a href="{% url 'panel:project_list' %}" style="color: var(--panel-text-muted); text-decoration: none; margin-bottom: 0.5rem; display: inline-block; font-size: 0.9rem;">
+            <i class="fa-solid fa-arrow-left"></i> Volver a Proyectos
+        </a>
+        <h1 class="panel-title">{{ title }}</h1>
+    </div>
+</div>
+
+<form method="post" enctype="multipart/form-data" novalidate class="panel-card" style="padding: 2.5rem; border-top: 4px solid var(--panel-accent);">
+    {% csrf_token %}
+    
+    {% if form.errors %}
+    <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; padding: 1.5rem; border-radius: 12px; margin-bottom: 2.5rem;">
+        <h4 style="margin-top: 0; display: flex; align-items: center; gap: 0.5rem;"><i class="fa-solid fa-triangle-exclamation"></i> Por favor, corrige los siguientes errores:</h4>
+        {{ form.errors }}
+    </div>
+    {% endif %}
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem;">
+        
+        <!-- Columna Izquierda: Info Principal -->
+        <div>
+            <div class="form-section">
+                <h3 class="form-section-title"><i class="fa-solid fa-align-left" style="color: var(--panel-accent);"></i> Información Básica</h3>
+                
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.titulo.id_for_label }}">Título del Proyecto</label>
+                    {{ form.titulo }}
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.slug.id_for_label }}">URL Amigable (Slug)</label>
+                    {{ form.slug }}
+                    <div style="font-size: 0.75rem; color: var(--panel-text-muted); margin-top: 0.3rem;">Se genera automáticamente a partir del título.</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.descripcion_corta.id_for_label }}">Descripción Corta</label>
+                    {{ form.descripcion_corta }}
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.descripcion_larga.id_for_label }}">Descripción Larga</label>
+                    {{ form.descripcion_larga }}
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h3 class="form-section-title"><i class="fa-solid fa-link" style="color: #3b82f6;"></i> Enlaces Externos</h3>
+                
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.url_demo.id_for_label }}">URL Demo (Producción)</label>
+                    {{ form.url_demo }}
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.url_github.id_for_label }}">Repositorio GitHub</label>
+                        {{ form.url_github }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.url_cliente.id_for_label }}">Web del Cliente</label>
+                        {{ form.url_cliente }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna Derecha: Media y Config -->
+        <div>
+            <div class="form-section" style="border: 1px dashed rgba(139, 92, 246, 0.4); background: rgba(139, 92, 246, 0.05);">
+                <h3 class="form-section-title"><i class="fa-solid fa-photo-film" style="color: var(--panel-accent);"></i> Multimedia</h3>
+                
+                <div class="form-group">
+                    <label class="form-label">Imagen de Portada (Opcional)</label>
+                    <label class="custom-file-upload">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> Seleccionar Imagen
+                        <input type="file" name="imagen_portada" accept="image/*" id="{{ form.imagen_portada.id_for_label }}" style="display: none;">
+                    </label>
+                    <div id="file-name-display" class="file-name-display">Ningún archivo seleccionado</div>
+                    
+                    {% if form.instance.imagen_portada %}
+                    <div id="portada-preview-container" style="margin-top: 1rem; position: relative; display: inline-block;">
+                        <img src="{{ form.instance.imagen_portada.url }}" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                        <span style="position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); color: #fff; padding: 2px 8px; border-radius: 12px; font-size: 0.7rem; backdrop-filter: blur(4px);">Portada Actual</span>
+                        
+                        <button type="button" onclick="clearImage('imagen_portada', 'portada-preview-container')" style="position: absolute; bottom: 8px; right: 8px; background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.5); transition: background 0.2s;">
+                            <i class="fa-solid fa-trash"></i> Eliminar
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group" style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <label class="form-label" for="{{ form.youtube_url.id_for_label }}"><i class="fa-brands fa-youtube" style="color: #ef4444;"></i> Video YouTube (Requerido)</label>
+                    <p style="font-size: 0.8rem; color: var(--panel-text-muted); margin-top: 0; margin-bottom: 0.75rem;">Pega el enlace del video o el código <code>&lt;iframe&gt;</code>. Extraeremos el video automáticamente.</p>
+                    {{ form.youtube_url }}
+                    
+                    <div style="margin-top: 1.5rem;">
+                        <label class="form-label">Subir Miniatura / Foto Manual (Opcional)</label>
+                        <p style="font-size: 0.8rem; color: var(--panel-text-muted); margin-top: 0; margin-bottom: 0.75rem;">Si no pones video, o si quieres usar una imagen distinta a la de YouTube, súbela aquí.</p>
+                        <label class="custom-file-upload">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Seleccionar Imagen Extra
+                            <input type="file" name="miniatura_youtube" accept="image/*" id="{{ form.miniatura_youtube.id_for_label }}" style="display: none;">
+                        </label>
+                        <div id="file-name-display-yt" class="file-name-display">Ningún archivo seleccionado</div>
+                    </div>
+                    
+                    {% if form.instance.miniatura_youtube %}
+                    <div id="miniatura-preview-container" style="margin-top: 1.5rem; position: relative; display: inline-block;">
+                        <span style="font-size: 0.75rem; text-transform: uppercase; color: #10b981; font-weight: 700; display: block; margin-bottom: 0.5rem;">Miniatura o Foto Actual</span>
+                        <img src="{{ form.instance.miniatura_youtube.url }}" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                        
+                        <button type="button" onclick="clearImage('miniatura_youtube', 'miniatura-preview-container')" style="position: absolute; bottom: 8px; right: 8px; background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.5); transition: background 0.2s;">
+                            <i class="fa-solid fa-trash"></i> Eliminar
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title"><i class="fa-solid fa-tags" style="color: #10b981;"></i> Clasificación</h3>
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.categorias.id_for_label }}">Categorías</label>
+                    <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px; border: 1px solid var(--panel-border);">
+                        {{ form.categorias }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.tecnologias.id_for_label }}">Tecnologías</label>
+                    <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px; border: 1px solid var(--panel-border); max-height: 200px; overflow-y: auto;">
+                        {{ form.tecnologias }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title"><i class="fa-solid fa-sliders" style="color: #f59e0b;"></i> Configuración</h3>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.estado.id_for_label }}">Estado de Desarrollo</label>
+                        {{ form.estado }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.estado_publicacion.id_for_label }}">Publicación</label>
+                        {{ form.estado_publicacion }}
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: end;">
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.orden.id_for_label }}">Orden de aparición</label>
+                        {{ form.orden }}
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; background: rgba(139, 92, 246, 0.1); padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid rgba(139, 92, 246, 0.3);">
+                        {{ form.destacado }}
+                        <label class="form-label" for="{{ form.destacado.id_for_label }}" style="margin: 0; color: #fff; cursor: pointer;">Mostrar en Portada (Destacado)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEO Colapsable Simple -->
+            <details style="background: rgba(255,255,255,0.02); padding: 1rem 1.5rem; border-radius: 12px; border: 1px solid var(--panel-border);">
+                <summary style="font-weight: 600; cursor: pointer; color: var(--panel-text-muted); display: flex; align-items: center; gap: 0.5rem;"><i class="fa-solid fa-magnifying-glass"></i> Configuración Avanzada SEO</summary>
+                <div style="margin-top: 1.5rem;">
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.meta_title.id_for_label }}">Meta Title (Opcional)</label>
+                        {{ form.meta_title }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.meta_description.id_for_label }}">Meta Description (Opcional)</label>
+                        {{ form.meta_description }}
+                    </div>
+                </div>
+            </details>
+
+        </div>
+    </div>
+
+    <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: flex-end; gap: 1rem;">
+        <a href="{% url 'panel:project_list' %}" class="btn-panel" style="background: rgba(255,255,255,0.05); border: 1px solid var(--panel-border); color: var(--panel-text);">Cancelar</a>
+        <button type="submit" class="btn-panel btn-panel-primary" style="padding: 0.75rem 2.5rem; font-size: 1.1rem; border-radius: 10px; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);">
+            <i class="fa-solid fa-save"></i> Guardar Proyecto
+        </button>
+    </div>
+</form>
+
+<script>
+    // 1. Auto-generar slug
+    const tituloInput = document.getElementById('{{ form.titulo.id_for_label }}');
+    const slugInput = document.getElementById('{{ form.slug.id_for_label }}');
+    
+    if(tituloInput && slugInput) {
+        tituloInput.addEventListener('keyup', function() {
+            if (!slugInput.value || slugInput.getAttribute('data-auto') === 'true') {
+                slugInput.setAttribute('data-auto', 'true');
+                let slug = this.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+                slugInput.value = slug;
+            }
+        });
+        
+        slugInput.addEventListener('change', function() {
+            this.setAttribute('data-auto', 'false');
+        });
+    }
+
+    // 2. Custom File Input display for Portada
+    const fileInput = document.getElementById('{{ form.imagen_portada.id_for_label }}');
+    const fileNameDisplay = document.getElementById('file-name-display');
+    
+    if(fileInput && fileNameDisplay) {
+        fileInput.addEventListener('change', function() {
+            if(this.files && this.files.length > 0) {
+                fileNameDisplay.innerHTML = `<i class="fa-solid fa-check" style="color: #10b981;"></i> Archivo seleccionado: <strong>${this.files[0].name}</strong>`;
+            } else {
+                fileNameDisplay.textContent = 'Ningún archivo seleccionado';
+            }
+        });
+    }
+
+    // 3. Custom File Input display for Miniatura (YouTube / Foto Extra)
+    const ytFileInput = document.getElementById('{{ form.miniatura_youtube.id_for_label }}');
+    const ytFileNameDisplay = document.getElementById('file-name-display-yt');
+    
+    if(ytFileInput && ytFileNameDisplay) {
+        ytFileInput.addEventListener('change', function() {
+            if(this.files && this.files.length > 0) {
+                ytFileNameDisplay.innerHTML = `<i class="fa-solid fa-check" style="color: #10b981;"></i> Archivo seleccionado: <strong>${this.files[0].name}</strong>`;
+            } else {
+                ytFileNameDisplay.textContent = 'Ningún archivo seleccionado';
+            }
+        });
+    }
+
+    // 4. Lógica para eliminar imágenes (Check invisible para Django)
+    function clearImage(fieldName, containerId) {
+        // Buscar el checkbox que Django genera por defecto (fieldname-clear)
+        let djangoCheckbox = document.querySelector(`input[name="${fieldName}-clear"]`);
+        if (djangoCheckbox) {
+            if (djangoCheckbox.type === 'checkbox') {
+                djangoCheckbox.checked = true;
+            } else {
+                djangoCheckbox.value = 'on';
+            }
+        } else {
+            // Si no lo encuentra, inyectamos uno manualmente para que el backend de Django lo reciba
+            let hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = `${fieldName}-clear`;
+            hiddenInput.value = 'on';
+            document.querySelector('form').appendChild(hiddenInput);
+        }
+        
+        // Ocultar visualmente la previsualización
+        document.getElementById(containerId).style.display = 'none';
+    }
+</script>
+{% endblock %}

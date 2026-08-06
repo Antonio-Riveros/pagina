@@ -1,0 +1,312 @@
+/* Panel Custom CSS - Glassmorphism & Dark Mode */
+
+:root {
+    --panel-bg: #0b0d12;
+    --panel-sidebar: rgba(17, 19, 26, 0.8);
+    --panel-surface: rgba(25, 28, 36, 0.6);
+    --panel-border: rgba(255, 255, 255, 0.08);
+    --panel-text: #e2e8f0;
+    --panel-text-muted: #94a3b8;
+    --panel-accent: #8b5cf6;
+    --panel-accent-hover: #7c3aed;
+    --panel-danger: #ef4444;
+}
+
+body.panel-mode {
+    background-color: var(--panel-bg);
+    color: var(--panel-text);
+    margin: 0;
+    font-family: 'Inter', system-ui, sans-serif;
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.panel-sidebar {
+    width: 260px;
+    background: var(--panel-sidebar);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-right: 1px solid var(--panel-border);
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    position: fixed;
+    height: 100vh;
+    box-sizing: border-box;
+    z-index: 100;
+}
+
+.panel-logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+}
+
+.panel-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.panel-nav a {
+    color: var(--panel-text-muted);
+    text-decoration: none;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.panel-nav a:hover, .panel-nav a.active {
+    background: rgba(139, 92, 246, 0.15);
+    color: var(--panel-accent);
+}
+
+/* Main Content */
+.panel-main {
+    flex: 1;
+    margin-left: 260px;
+    padding: 2rem 3rem;
+    overflow-y: auto;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.panel-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+    color: #fff;
+}
+
+/* Cards & Tables */
+.panel-card {
+    background: var(--panel-surface);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--panel-border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.panel-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.panel-table th, .panel-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--panel-border);
+}
+
+.panel-table th {
+    color: var(--panel-text-muted);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--panel-text);
+}
+
+.form-control, .form-control-file {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    color: #fff;
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--panel-accent);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.25);
+}
+
+.form-checkbox {
+    width: 1.2rem;
+    height: 1.2rem;
+    accent-color: var(--panel-accent);
+}
+
+/* Buttons */
+.btn-panel {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: 1px solid transparent; /* Prevents size changes if borders are added later */
+    font-family: inherit;
+    font-size: 1rem;
+    box-sizing: border-box;
+    height: 42px; /* Fixed height for perfect consistency */
+}
+
+.btn-panel-primary {
+    background: var(--panel-accent);
+    color: #fff;
+}
+
+.btn-panel-primary:hover {
+    background: var(--panel-accent-hover);
+    transform: translateY(-1px);
+}
+
+.btn-panel-danger {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--panel-danger);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.btn-panel-danger:hover {
+    background: var(--panel-danger);
+    color: #fff;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    body.panel-mode { flex-direction: column; }
+    .panel-sidebar { position: static; width: 100%; height: auto; padding: 1rem; border-right: none; border-bottom: 1px solid var(--panel-border); z-index: 10; }
+    .panel-main { margin-left: 0; padding: 1rem; }
+    .panel-nav { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+    .panel-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .panel-card { padding: 1rem; }
+    .panel-table { display: block; overflow-x: auto; white-space: nowrap; }
+    div[style*='grid-template-columns'] { grid-template-columns: 1fr !important; }
+}
+
+/* Enhanced Form Elements */
+.form-control, .form-control-file {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    transition: all 0.25s ease;
+}
+.form-control:focus {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--panel-accent);
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
+}
+.form-group label {
+    color: #e2e8f0;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+}
+/* Checkbox Grids */
+.form-checkbox-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.75rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.form-checkbox-list li {
+    display: flex;
+    align-items: center;
+}
+.form-checkbox-list label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.2s;
+    font-size: 0.85rem;
+    margin-bottom: 0;
+    font-weight: 500;
+}
+.form-checkbox-list label:hover {
+    background: rgba(139, 92, 246, 0.1);
+    border-color: rgba(139, 92, 246, 0.3);
+}
+.form-checkbox-list input[type='checkbox'] {
+    accent-color: var(--panel-accent);
+    width: 1.1rem;
+    height: 1.1rem;
+}
+/* File Input Styling */
+.custom-file-upload {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px dashed rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--panel-accent);
+    font-weight: 600;
+    transition: all 0.2s;
+}
+.custom-file-upload:hover {
+    background: rgba(139, 92, 246, 0.1);
+    border-color: var(--panel-accent);
+}
+.file-input-hidden {
+    display: none;
+}
+.file-name-display {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--panel-text-muted);
+}
+/* Section Cards */
+.form-section {
+    background: rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--panel-border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+.form-section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 0.75rem;
+}
