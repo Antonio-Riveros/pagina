@@ -33,6 +33,8 @@ class ProjectForm(forms.ModelForm):
         }
 
 class HomePageConfigForm(forms.ModelForm):
+    clear_imagen_hero = forms.BooleanField(required=False, initial=False)
+
     class Meta:
         model = HomePageConfig
         fields = ['titulo_principal', 'subtitulo_destacado', 'descripcion', 'imagen_hero']
@@ -42,3 +44,12 @@ class HomePageConfigForm(forms.ModelForm):
             'descripcion': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Breve descripción de los servicios...'}),
             'imagen_hero': forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
         }
+        
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        if self.cleaned_data.get('clear_imagen_hero'):
+            instance.imagen_hero.delete(save=False)
+            instance.imagen_hero = None
+        if commit:
+            instance.save()
+        return instance
