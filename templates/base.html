@@ -15,97 +15,239 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- CSS -->
-    <link rel="stylesheet" href="{% static 'css/main.css' %}?v=4">
+    <!-- TailwindCSS (CDN for Django Templates) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        zinc: {
+                            50: '#fafafa',
+                            100: '#f4f4f5',
+                            200: '#e4e4e7',
+                            300: '#d4d4d8',
+                            400: '#a1a1aa',
+                            500: '#71717a',
+                            600: '#52525b',
+                            700: '#3f3f46',
+                            800: '#27272a',
+                            900: '#18181b',
+                            950: '#09090b',
+                        },
+                        brand: {
+                            50: '#f5f3ff',
+                            100: '#ede9fe',
+                            200: '#ddd6fe',
+                            300: '#c4b5fd',
+                            400: '#a78bfa',
+                            500: '#8b5cf6', // Violeta primario
+                            600: '#7c3aed',
+                            700: '#6d28d9',
+                            800: '#5b21b6',
+                            900: '#4c1d95',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', 'monospace'],
+                    },
+                    spacing: {
+                        '18': '4.5rem',
+                        '22': '5.5rem',
+                        '30': '7.5rem',
+                    },
+                    borderRadius: {
+                        '4xl': '2rem',
+                    },
+                    boxShadow: {
+                        'glow': '0 0 20px rgba(139, 92, 246, 0.15)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer base {
+            html {
+                font-family: 'Inter', system-ui, sans-serif;
+                background-color: #09090b; /* zinc-950 */
+                color: #fafafa; /* zinc-50 */
+                scroll-behavior: smooth;
+            }
+            body {
+                @apply bg-slate-950 text-slate-50 min-h-screen flex flex-col overflow-x-hidden;
+            }
+            /* Reduce motion for accessibility */
+            @media (prefers-reduced-motion: reduce) {
+                html {
+                    scroll-behavior: auto;
+                }
+                *, *::before, *::after {
+                    animation-duration: 0.01ms !important;
+                    animation-iteration-count: 1 !important;
+                    transition-duration: 0.01ms !important;
+                    scroll-behavior: auto !important;
+                }
+            }
+        }
+        @layer utilities {
+            .glass {
+                @apply bg-white/5 backdrop-blur-md border border-white/10;
+            }
+            .glass-panel {
+                @apply bg-slate-900/80 backdrop-blur-xl border border-white/10 shadow-2xl;
+            }
+            .text-gradient {
+                @apply bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400;
+            }
+            .text-gradient-brand {
+                @apply bg-clip-text text-transparent bg-gradient-to-r from-white to-brand-400;
+            }
+        }
+    </style>
     
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- HTMX -->
-    <script src="https://unpkg.com/htmx.org@1.9.10" defer></script>
+    <!-- CSS Custom (Legacy/Components) -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}?v=5">
     
     <!-- JS Vanilla -->
     <script src="{% static 'js/main.js' %}?v=4" defer></script>
     
     {% block extra_head %}{% endblock %}
 </head>
-<body htmx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+<body class="bg-slate-950 text-slate-50 antialiased selection:bg-brand-500/30" htmx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     
     <!-- Mesh Gradient Background Core -->
-    <div style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: radial-gradient(circle at 15% 50%, rgba(124, 58, 237, 0.05), transparent 25%), radial-gradient(circle at 85% 30%, rgba(124, 58, 237, 0.03), transparent 25%); z-index: -10; pointer-events: none;"></div>
+    <div style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: radial-gradient(circle at 15% 50%, rgba(79, 70, 229, 0.15), transparent 40%), radial-gradient(circle at 85% 30%, rgba(6, 182, 212, 0.1), transparent 40%), radial-gradient(circle at 50% 100%, rgba(139, 92, 246, 0.1), transparent 50%); z-index: -10; pointer-events: none;"></div>
     
     <!-- Navbar Ultra Minimal -->
-    <nav class="navbar" style="position: sticky; top: 0; z-index: 100; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-glass); background: rgba(0,0,0,0.6);">
-        <div class="container flex justify-between items-center" style="padding-top: var(--space-4); padding-bottom: var(--space-4);">
-            <a href="{% url 'home' %}" style="font-weight: 800; font-size: 1.4rem; text-decoration: none; color: var(--text-primary); letter-spacing: -0.05em; display: flex; align-items: center; gap: 0.5rem;">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-primary);"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg>
+    <nav class="sticky top-0 z-50 w-full backdrop-blur-xl bg-slate-950/60 border-b border-white/5 shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
+        <div class="mx-auto max-w-5xl px-6 flex items-center justify-between h-16">
+            <!-- Logo -->
+            <a href="{% url 'home' %}" class="flex items-center gap-2 text-slate-50 font-bold text-xl tracking-tight transition hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 rounded-md">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="url(#logo-grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <defs>
+                        <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#818cf8" />
+                            <stop offset="100%" stop-color="#2dd4bf" />
+                        </linearGradient>
+                    </defs>
+                    <path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/>
+                </svg>
                 gedari
             </a>
-            
-            <div class="nav-links" style="display: flex; gap: var(--space-8); align-items: center;">
-                <a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Inicio</a>
-                <a href="{% url 'projects:list' %}" class="nav-link {% if request.resolver_match.app_name == 'projects' %}active{% endif %}">Proyectos</a>
-                <a href="{% url 'videos:library' %}" class="nav-link {% if request.resolver_match.app_name == 'videos' %}active{% endif %}">Videos</a>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center gap-8">
+                <a href="{% url 'home' %}" class="text-sm font-medium transition-colors hover:text-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 rounded-sm {% if request.resolver_match.url_name == 'home' %}text-slate-50{% else %}text-slate-400{% endif %}">Inicio</a>
+                <a href="{% url 'projects:list' %}" class="text-sm font-medium transition-colors hover:text-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 rounded-sm {% if request.resolver_match.app_name == 'projects' %}text-slate-50{% else %}text-slate-400{% endif %}">Proyectos</a>
+                <a href="{% url 'videos:library' %}" class="text-sm font-medium transition-colors hover:text-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 rounded-sm {% if request.resolver_match.app_name == 'videos' %}text-slate-50{% else %}text-slate-400{% endif %}">Videos</a>
             </div>
-            
-            <div class="flex items-center gap-4">
-                <a href="{% url 'contact:page' %}" class="btn btn-primary" style="font-size: 0.85rem; padding: 0.4rem 1rem; height: auto;">
-                    Contáctanos
+
+            <!-- Desktop CTA -->
+            <div class="hidden md:flex items-center">
+                <a href="{% url 'contact:page' %}" class="bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-400 hover:to-cyan-400 shadow-lg shadow-indigo-500/20 text-white transition-all px-5 py-2 rounded-full text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950">
+                    Contacto
                 </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="md:hidden p-2 -mr-2 text-slate-400 hover:text-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 rounded-md" aria-expanded="false" aria-label="Abrir menú">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="hidden md:hidden absolute top-16 left-0 w-full bg-slate-950/95 backdrop-blur-xl border-b border-white/10 px-6 py-4 shadow-2xl">
+            <div class="flex flex-col gap-4">
+                <a href="{% url 'home' %}" class="text-sm font-medium transition-colors hover:text-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 rounded-sm w-max {% if request.resolver_match.url_name == 'home' %}text-slate-50{% else %}text-slate-400{% endif %}">Inicio</a>
+                <a href="{% url 'projects:list' %}" class="text-sm font-medium transition-colors hover:text-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 rounded-sm w-max {% if request.resolver_match.app_name == 'projects' %}text-slate-50{% else %}text-slate-400{% endif %}">Proyectos</a>
+                <a href="{% url 'videos:library' %}" class="text-sm font-medium transition-colors hover:text-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 rounded-sm w-max {% if request.resolver_match.app_name == 'videos' %}text-slate-50{% else %}text-slate-400{% endif %}">Videos</a>
+                <div class="pt-4 mt-2 border-t border-white/10">
+                    <a href="{% url 'contact:page' %}" class="inline-flex justify-center w-full bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-400 hover:to-cyan-400 text-white transition-colors px-4 py-3 rounded-full text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 shadow-lg shadow-indigo-500/20">
+                        Contacto
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
+
+    <!-- JavaScript for Mobile Menu -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            if (btn && menu) {
+                btn.addEventListener('click', () => {
+                    menu.classList.toggle('hidden');
+                    const isExpanded = !menu.classList.contains('hidden');
+                    btn.setAttribute('aria-expanded', isExpanded);
+                    if (isExpanded) {
+                        btn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>';
+                    } else {
+                        btn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>';
+                    }
+                });
+            }
+        });
+    </script>
     
     <main>
         {% block content %}{% endblock %}
     </main>
     
-    <!-- Footer Architectural -->
-    <footer style="border-top: 1px solid var(--border-glass); padding: var(--space-16) 0 var(--space-8) 0; margin-top: var(--space-32); position: relative; overflow: hidden;">
-        <div class="container">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
+    <!-- Footer Premium -->
+    <footer class="mt-32 border-t border-white/10 pb-8 pt-16">
+        <div class="mx-auto max-w-5xl px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
                 
-                <div style="grid-column: span 2; max-width: 400px;">
-                    <a href="{% url 'home' %}" style="font-weight: 800; font-size: 1.4rem; text-decoration: none; color: var(--text-primary); letter-spacing: -0.05em; display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-4);">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg>
+                <div class="md:col-span-2">
+                    <a href="{% url 'home' %}" class="flex items-center gap-2 text-slate-50 font-bold text-xl tracking-tight mb-4 transition hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 rounded-md w-max">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="url(#logo-grad-footer)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <defs>
+                                <linearGradient id="logo-grad-footer" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#818cf8" />
+                                    <stop offset="100%" stop-color="#2dd4bf" />
+                                </linearGradient>
+                            </defs>
+                            <path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/>
+                        </svg>
                         gedari
                     </a>
-                    <p class="text-muted" style="font-size: 0.9rem; line-height: 1.6; margin-bottom: var(--space-6);">
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6 max-w-sm">
                         Ingeniería de software, diseño de interfaces y arquitectura de sistemas. Construyendo productos digitales que escalan.
                     </p>
-                    <div style="display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; border: 1px solid var(--border-color); padding: 0.25rem 0.75rem; border-radius: var(--radius-full); color: var(--text-secondary);">
-                        <span style="width: 6px; height: 6px; background: #10b981; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #10b981;"></span>
-                        Disponible
+                    <div class="inline-flex items-center gap-2 text-xs border border-white/10 px-3 py-1.5 rounded-full text-slate-400 bg-white/5">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
+                        Disponible para nuevos proyectos
                     </div>
                 </div>
                 
                 <div>
-                    <h4 style="font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-4);">Plataforma</h4>
+                    <h4 class="text-slate-50 font-semibold text-sm mb-4">Plataforma</h4>
                     <div class="flex flex-col gap-3">
-                        <a href="{% url 'home' %}" class="text-secondary" style="font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">Inicio</a>
-                        <a href="{% url 'projects:list' %}" class="text-secondary" style="font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">Proyectos</a>
-                        <a href="{% url 'videos:library' %}" class="text-secondary" style="font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">Videos</a>
+                        <a href="{% url 'home' %}" class="text-slate-400 hover:text-slate-50 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 rounded-sm w-max">Inicio</a>
+                        <a href="{% url 'projects:list' %}" class="text-slate-400 hover:text-slate-50 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 rounded-sm w-max">Proyectos</a>
+                        <a href="{% url 'videos:library' %}" class="text-slate-400 hover:text-slate-50 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 rounded-sm w-max">Videos</a>
                     </div>
                 </div>
                 
                 <div>
-                    <h4 style="font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-4);">Redes</h4>
+                    <h4 class="text-slate-50 font-semibold text-sm mb-4">Redes</h4>
                     <div class="flex flex-col gap-3">
-                        <a href="#" class="text-secondary" style="font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">GitHub</a>
-                        <a href="#" class="text-secondary" style="font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">LinkedIn</a>
-                        <a href="#" class="text-secondary" style="font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">Twitter</a>
+                        <a href="https://github.com/gedari" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-slate-50 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 rounded-sm w-max">GitHub</a>
+                        <a href="https://linkedin.com/in/gedari" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-slate-50 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 rounded-sm w-max">LinkedIn</a>
+                        <a href="https://twitter.com/gedari" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-slate-50 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 rounded-sm w-max">Twitter</a>
                     </div>
                 </div>
                 
             </div>
             
-            <div style="border-top: 1px solid var(--border-glass); padding-top: var(--space-6); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4);">
-                <p class="text-muted" style="font-size: 0.85rem;">
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-slate-500 text-xs">
                     &copy; {% now "Y" %} gedari. Todos los derechos reservados.
                 </p>
-                <div class="flex gap-4">
-                    <span class="text-muted" style="font-size: 0.85rem;">Construido con Django</span>
-                </div>
             </div>
         </div>
     </footer>

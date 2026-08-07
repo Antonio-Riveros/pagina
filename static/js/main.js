@@ -16,15 +16,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (iframe && iframe.dataset.src) {
                     iframe.src = iframe.dataset.src;
                 }
+                // Remove hidden and add flex, then animate opacity
+                targetModal.classList.remove('hidden');
+                targetModal.classList.add('flex');
+                setTimeout(() => targetModal.classList.remove('opacity-0'), 10);
                 
-                targetModal.classList.add('active');
                 document.body.style.overflow = 'hidden';
             }
         });
     });
 
     const closeModal = (modal) => {
-        modal.classList.remove('active');
+        modal.classList.add('opacity-0');
+        setTimeout(() => {
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }, 300);
         document.body.style.overflow = '';
         
         // Stop video playback if it's a video modal

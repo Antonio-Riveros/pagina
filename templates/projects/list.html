@@ -4,64 +4,67 @@
 {% block title %}Proyectos | {{ block.super }}{% endblock %}
 
 {% block content %}
-<section class="section container" style="padding-top: var(--space-16);">
-    <div class="text-center mb-12">
-        <h1 style="font-size: 3rem; font-weight: 700; margin-bottom: 1rem;">Mis <span class="text-gradient">Proyectos</span></h1>
-        <p class="text-muted" style="max-width: 600px; margin: 0 auto; font-size: 1.1rem;">
+<section class="py-24 md:py-32 relative">
+    <div class="mx-auto max-w-5xl px-6 mb-16 md:mb-24 text-center relative z-10">
+        <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-slate-50 mb-6">Mis Proyectos</h1>
+        <p class="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
             Explora una selección de mis trabajos más recientes. Aplicaciones web, sistemas y soluciones construidas con pasión.
         </p>
     </div>
 
-    {% if proyectos %}
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" style="margin-bottom: var(--space-16);">
-        {% for proyecto in proyectos %}
-        <div class="glass-card" style="display: flex; flex-direction: column;">
-            <div style="padding: 1.5rem 1.5rem 0.5rem 1.5rem; text-align: center;">
-                <h3 style="font-size: 1.5rem; font-weight: 700; margin: 0; color: var(--text-primary);">{{ proyecto.titulo }}</h3>
-            </div>
-            
-            <a href="{% url 'projects:detail' proyecto.slug %}" style="display: block; text-decoration: none; color: inherit;">
-                <div class="glass-img-wrapper" style="margin: 0.5rem 1.5rem; border-radius: var(--radius-md); overflow: hidden; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+    <div class="mx-auto max-w-5xl px-6">
+        {% if proyectos %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for proyecto in proyectos %}
+            <article class="group relative flex flex-col bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden hover:border-indigo-500/30 hover:shadow-2xl hover:shadow-indigo-500/20 transition-all duration-300 group-hover:-translate-y-1">
+                <a href="{% url 'projects:detail' proyecto.slug %}" class="absolute inset-0 z-10" aria-label="Ver detalles de {{ proyecto.titulo }}"></a>
+                
+                <div class="relative aspect-video overflow-hidden bg-slate-950">
+                    <!-- Overlay gradient for smooth integration -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent z-10 pointer-events-none"></div>
+                    
                     {% if proyecto.miniatura_youtube %}
-                    <img src="{{ proyecto.miniatura_youtube.url }}" alt="{{ proyecto.titulo }}" style="width: 100%; aspect-ratio: 16/9; object-fit: cover;">
-                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; background: rgba(0,0,0,0.7); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff;">
-                        <i class="fa-solid fa-play" style="margin-left: 3px;"></i>
+                    <img src="{{ proyecto.miniatura_youtube.url }}" alt="Miniatura de {{ proyecto.titulo }}" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" loading="lazy">
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-slate-950/60 backdrop-blur-md rounded-full flex items-center justify-center text-white z-20 border border-white/10 shadow-xl transition-all duration-300 group-hover:scale-110 group-hover:bg-indigo-600/80 group-hover:border-indigo-400/50">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
                     </div>
                     {% elif proyecto.imagen_portada %}
-                    <img src="{{ proyecto.imagen_portada.url }}" alt="{{ proyecto.titulo }}" style="width: 100%; aspect-ratio: 16/9; object-fit: cover;">
+                    <img src="{{ proyecto.imagen_portada.url }}" alt="Portada de {{ proyecto.titulo }}" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" loading="lazy">
                     {% else %}
-                    <div style="width: 100%; aspect-ratio: 16/9; background-color: var(--bg-tertiary); display: flex; align-items: center; justify-content: center;">
-                        <i class="fa-solid fa-code" style="font-size: 3rem; color: var(--text-muted);"></i>
+                    <div class="w-full h-full bg-slate-900 flex items-center justify-center">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-slate-700"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
                     </div>
                     {% endif %}
                     
-                    <div style="position: absolute; top: 0.5rem; right: 0.5rem; z-index: 10; pointer-events: none;">
-                        <span class="badge badge-{{ proyecto.estado|slugify }}">
-                            <div class="badge-dot"></div>
+                    <div class="absolute top-3 right-3 z-20 pointer-events-none">
+                        <span class="px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 rounded-full backdrop-blur-md">
                             {{ proyecto.get_estado_display }}
                         </span>
                     </div>
                 </div>
-            </a>
-            
-            <div class="glass-content" style="padding-top: 0.5rem; display: flex; flex-direction: column; flex-grow: 1;">
-                <div class="flex gap-3 mt-auto">
-                    <a href="{% url 'projects:detail' proyecto.slug %}" class="btn btn-primary" style="flex: 1; text-align: center; justify-content: center; padding: 0.8rem;">
-                        Más Info
-                    </a>
+                
+                <div class="p-6 flex flex-col flex-grow relative z-20">
+                    <h3 class="text-xl font-bold text-slate-50 mb-3 group-hover:text-indigo-400 transition-colors duration-300">
+                        {{ proyecto.titulo }}
+                    </h3>
+                    
+                    <div class="flex items-center gap-2 mt-auto pt-4 border-t border-slate-800 text-indigo-400 text-sm font-semibold group-hover:gap-3 transition-all duration-300">
+                        Ver Detalles
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </div>
                 </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="py-24 text-center border border-slate-800 rounded-3xl bg-slate-900/50 backdrop-blur-sm max-w-2xl mx-auto">
+            <div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center rounded-full bg-slate-800 text-slate-500">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
             </div>
+            <h3 class="text-xl font-semibold text-slate-50 mb-2">Todavía no hay proyectos publicados</h3>
+            <p class="text-slate-400">Vuelve más tarde para descubrir mis próximos lanzamientos.</p>
         </div>
-        {% endfor %}
+        {% endif %}
     </div>
-    {% else %}
-    <div style="text-align: center; padding: 6rem 2rem; background: var(--bg-secondary); border: 1px dashed var(--border-color); border-radius: var(--radius-xl); margin-bottom: var(--space-16);">
-        <div style="font-size: 4rem; color: var(--text-muted); margin-bottom: 1.5rem;">
-            <i class="fa-regular fa-folder-open"></i>
-        </div>
-        <h3 style="font-size: 1.75rem; font-weight: 600; margin-bottom: 0.5rem;">Todavía no hay proyectos publicados</h3>
-        <p style="color: var(--text-muted); font-size: 1.1rem;">Vuelve más tarde para descubrir mis próximos lanzamientos.</p>
-    </div>
-    {% endif %}
 </section>
 {% endblock %}

@@ -3,57 +3,70 @@
 {% block title %}Biblioteca de Videos | Portfolio Premium{% endblock %}
 
 {% block content %}
-<div class="container section">
-    <div class="flex justify-between items-center mb-8" style="flex-wrap: wrap; gap: var(--space-4);">
-        <h1 style="font-size: 2.5rem;">Biblioteca de Videos</h1>
+<section class="py-24 md:py-32 relative">
+    <div class="mx-auto max-w-5xl px-6 mb-16 md:mb-24">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-8 mb-12">
+            <div class="text-center md:text-left">
+                <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-50 mb-4">Biblioteca de Videos</h1>
+                <p class="text-lg text-slate-400">Demostraciones, tutoriales y recorridos técnicos.</p>
+            </div>
+            
+            <div class="relative w-full md:w-80">
+                <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input 
+                    type="search" 
+                    name="q" 
+                    value="{{ query }}"
+                    placeholder="Buscar videos..." 
+                    class="w-full bg-slate-900/60 border border-slate-800 text-slate-50 rounded-xl pl-12 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all placeholder:text-slate-500"
+                    hx-get="{% url 'videos:library' %}"
+                    hx-trigger="keyup changed delay:300ms, search"
+                    hx-include="[name='categoria']"
+                    hx-target="#video-grid"
+                    hx-indicator=".htmx-indicator"
+                >
+            </div>
+        </div>
         
-        <div style="position: relative; width: 100%; max-width: 300px;">
-            <i class="fa-solid fa-search" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
-            <input 
-                type="search" 
-                name="q" 
-                value="{{ query }}"
-                placeholder="Buscar videos..." 
-                class="form-control" 
-                style="padding-left: 2.5rem;"
-                hx-get="{% url 'videos:library' %}"
-                hx-trigger="keyup changed delay:300ms, search"
-                hx-include="[name='categoria']"
-                hx-target="#video-grid"
-                hx-indicator=".htmx-indicator"
-            >
+        <!-- Filters -->
+        <div class="flex flex-wrap justify-center md:justify-start gap-2 mb-12">
+            <button class="filter-btn px-4 py-2 rounded-full text-sm font-medium transition-colors {% if not current_category %}bg-gradient-to-r from-indigo-500 to-cyan-500 text-white shadow-lg shadow-indigo-500/20 border border-transparent{% else %}bg-slate-900 text-slate-400 hover:bg-slate-800 hover:text-slate-50 border border-slate-800{% endif %}"
+                    hx-get="{% url 'videos:library' %}"
+                    hx-include="[name='q']"
+                    hx-target="#video-grid"
+                    hx-indicator=".htmx-indicator"
+                    onclick="document.getElementById('cat-input').value=''; updateFilters(this);">
+                Todos
+            </button>
+            {% for cat in categorias %}
+            <button class="filter-btn px-4 py-2 rounded-full text-sm font-medium transition-colors {% if current_category == cat.slug %}bg-gradient-to-r from-indigo-500 to-cyan-500 text-white shadow-lg shadow-indigo-500/20 border border-transparent{% else %}bg-slate-900 text-slate-400 hover:bg-slate-800 hover:text-slate-50 border border-slate-800{% endif %}"
+                    hx-get="{% url 'videos:library' %}?categoria={{ cat.slug }}"
+                    hx-include="[name='q']"
+                    hx-target="#video-grid"
+                    hx-indicator=".htmx-indicator"
+                    onclick="document.getElementById('cat-input').value='{{ cat.slug }}'; updateFilters(this);">
+                {{ cat.nombre }}
+            </button>
+            {% endfor %}
+            <input type="hidden" name="categoria" id="cat-input" value="{{ current_category }}">
+        </div>
+        
+        <script>
+            function updateFilters(activeBtn) {
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.className = 'filter-btn px-4 py-2 rounded-full text-sm font-medium transition-colors bg-slate-900 text-slate-400 hover:bg-slate-800 hover:text-slate-50 border border-slate-800';
+                });
+                activeBtn.className = 'filter-btn px-4 py-2 rounded-full text-sm font-medium transition-colors bg-gradient-to-r from-indigo-500 to-cyan-500 text-white shadow-lg shadow-indigo-500/20 border border-transparent';
+            }
+        </script>
+        
+        <div class="flex justify-center mb-8 htmx-indicator hidden">
+            <svg class="animate-spin h-8 w-8 text-indigo-500" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+        </div>
+        
+        <div id="video-grid">
+            {% include 'videos/partials/_video_list.html' %}
         </div>
     </div>
-    
-    <!-- Filters -->
-    <div class="mb-8 flex gap-2" style="flex-wrap: wrap;">
-        <button class="btn {% if not current_category %}btn-primary{% else %}btn-secondary{% endif %}"
-                hx-get="{% url 'videos:library' %}"
-                hx-include="[name='q']"
-                hx-target="#video-grid"
-                hx-indicator=".htmx-indicator"
-                onclick="document.getElementById('cat-input').value=''; document.querySelectorAll('.filter-btn').forEach(b=>b.classList.replace('btn-primary','btn-secondary')); this.classList.replace('btn-secondary','btn-primary');">
-            Todos
-        </button>
-        {% for cat in categorias %}
-        <button class="btn filter-btn {% if current_category == cat.slug %}btn-primary{% else %}btn-secondary{% endif %}"
-                hx-get="{% url 'videos:library' %}?categoria={{ cat.slug }}"
-                hx-include="[name='q']"
-                hx-target="#video-grid"
-                hx-indicator=".htmx-indicator"
-                onclick="document.getElementById('cat-input').value='{{ cat.slug }}'; document.querySelectorAll('.filter-btn').forEach(b=>b.classList.replace('btn-primary','btn-secondary')); this.classList.replace('btn-secondary','btn-primary');">
-            {{ cat.nombre }}
-        </button>
-        {% endfor %}
-        <input type="hidden" name="categoria" id="cat-input" value="{{ current_category }}">
-    </div>
-    
-    <div style="text-align: center; margin-bottom: var(--space-4);">
-        <i class="htmx-indicator fa-solid fa-circle-notch fa-spin text-muted" style="font-size: 2rem;"></i>
-    </div>
-    
-    <div id="video-grid">
-        {% include 'videos/partials/_video_list.html' %}
-    </div>
-</div>
+</section>
 {% endblock %}

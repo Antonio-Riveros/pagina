@@ -3,40 +3,77 @@
 {% block title %}Contacto | Portfolio Premium{% endblock %}
 
 {% block content %}
-<div class="container section">
-    <div style="max-width: 600px; margin: 0 auto;">
-        <h1 style="font-size: 2.5rem; margin-bottom: var(--space-4); text-align: center;">Hablemos</h1>
-        <p class="text-muted text-center" style="font-size: 1.1rem; margin-bottom: var(--space-8);">
-            ¿Tienen un proyecto en mente o quieren discutir oportunidades de colaboración? Envíanos un mensaje y te responderemos lo antes posible.
-        </p>
+<section class="py-24 md:py-32 relative overflow-hidden">
+    <!-- Glow -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[400px] bg-cyan-500/20 blur-[120px] rounded-full pointer-events-none"></div>
+    <div class="absolute top-0 left-1/4 -translate-x-1/2 w-full max-w-lg h-[300px] bg-indigo-500/20 blur-[100px] rounded-full pointer-events-none"></div>
+    
+    <div class="mx-auto max-w-xl px-6 relative z-10">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-50 mb-4">Hablemos</h1>
+            <p class="text-lg text-slate-400">
+                ¿Tienes un proyecto en mente o quieres discutir oportunidades de colaboración? Envía un mensaje y te responderé lo antes posible.
+            </p>
+        </div>
         
-        <div class="card" style="padding: var(--space-8);">
+        <div class="p-8 md:p-10 rounded-3xl bg-slate-900/80 border border-white/5 backdrop-blur-2xl shadow-[0_0_50px_rgba(6,182,212,0.1)] relative overflow-hidden">
+            <!-- Glassmorphism reflection line -->
+            <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent"></div>
+            <style>
+                /* Style Django default form fields */
+                #contact-form-container input[type="text"],
+                #contact-form-container input[type="email"],
+                #contact-form-container textarea {
+                    width: 100%;
+                    background-color: rgba(15, 23, 42, 0.5); /* bg-slate-900/50 */
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    color: #f8fafc;
+                    border-radius: 0.75rem;
+                    padding: 0.75rem 1rem;
+                    transition: all 0.3s ease;
+                }
+                #contact-form-container input:focus,
+                #contact-form-container textarea:focus {
+                    outline: none;
+                    border-color: rgba(6, 182, 212, 0.5);
+                    box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.25); /* ring-cyan-500 */
+                }
+                #contact-form-container label {
+                    display: block;
+                    font-size: 0.875rem;
+                    font-weight: 500;
+                    color: #94a3b8; /* text-slate-400 */
+                    margin-bottom: 0.5rem;
+                }
+            </style>
+            
             <div id="contact-form-container">
                 {% if success %}
                     {% include 'contact/partials/_success.html' %}
                 {% else %}
-                <form hx-post="{% url 'contact:page' %}" hx-target="#contact-form-container" hx-swap="outerHTML">
+                <form hx-post="{% url 'contact:page' %}" hx-target="#contact-form-container" hx-swap="outerHTML" class="flex flex-col gap-6">
                     {% csrf_token %}
                     
                     {% for field in form %}
-                    <div class="form-group">
-                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    <div>
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                         {{ field }}
                         {% if field.errors %}
-                        <div class="text-accent" style="color: #e92a67; font-size: 0.85rem; margin-top: var(--space-1);">
+                        <div class="text-red-400 text-sm mt-2 font-medium">
                             {{ field.errors.0 }}
                         </div>
                         {% endif %}
                     </div>
                     {% endfor %}
                     
-                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: var(--space-4);">
+                    <button type="submit" class="mt-4 w-full inline-flex justify-center items-center gap-2 bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-400 hover:to-cyan-400 text-white transition-all px-6 py-4 rounded-xl font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 shadow-lg shadow-indigo-500/25 border border-transparent">
                         Enviar Mensaje
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                     </button>
                 </form>
                 {% endif %}
             </div>
         </div>
     </div>
-</div>
+</section>
 {% endblock %}
