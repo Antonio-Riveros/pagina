@@ -17,7 +17,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for proyecto in proyectos %}
             <article class="group relative flex flex-col bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden hover:border-indigo-500/30 hover:shadow-2xl hover:shadow-indigo-500/20 transition-all duration-300 group-hover:-translate-y-1">
-                <a href="{% url 'projects:detail' proyecto.slug %}" class="absolute inset-0 z-10" aria-label="Ver detalles de {{ proyecto.titulo }}"></a>
+                <a href="{% url 'projects:detail' proyecto.slug %}" class="absolute inset-0 z-30" aria-label="Ver detalles de {{ proyecto.titulo }}"></a>
                 
                 <div class="relative aspect-video overflow-hidden bg-slate-950">
                     <!-- Overlay gradient for smooth integration -->
